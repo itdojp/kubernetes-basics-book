@@ -107,10 +107,37 @@ kubectl -n demo port-forward svc/<service-name> 8081:80
 ## ハンズオン：最小のデプロイと疎通
 本節は後続章の前提となる「デプロイ→Service→疎通」の最小手順を確認します。
 
-1) Deployment を作成します。
+1) Deployment を作成します（YAML の詳細は第3章で扱います）。
 
 ```bash
-kubectl -n demo create deployment web --image=nginx:stable --port=80
+kubectl apply -f - <<'YAML'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: demo
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/instance: demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/instance: demo
+    spec:
+      containers:
+        - name: web
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+YAML
+kubectl -n demo rollout status deploy/web
 kubectl -n demo get deploy,pod -o wide
 ```
 

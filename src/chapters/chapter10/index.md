@@ -53,7 +53,7 @@ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 2) selector を誤らせて Endpoints を空にします（学習用途）。
 
 ```bash
-kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web-wrong\"}}}'
+kubectl -n demo patch svc web -p '{"spec":{"selector":{"app.kubernetes.io/name":"web-wrong"}}}'
 kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 ```
 
@@ -61,7 +61,7 @@ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 
 ```bash
 kubectl -n demo describe svc web
-kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web\",\"app.kubernetes.io/instance\":\"demo\"}}}'
+kubectl -n demo patch svc web -p '{"spec":{"selector":{"app.kubernetes.io/name":"web","app.kubernetes.io/instance":"demo"}}}'
 kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 ```
 

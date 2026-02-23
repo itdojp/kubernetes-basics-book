@@ -49,9 +49,9 @@ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 2) 一時的な Pod から名前解決と HTTP を確認します。
 
 ```bash
-kubectl -n demo run tmp --rm -it --image=busybox:1.36.1 -- sh
+kubectl -n demo run tmp --rm -it --restart=Never --image=busybox:1.36.1 -- sh
 # inside the pod
-nslookup web
+nslookup web.demo.svc.cluster.local
 wget -qO- http://web/ > /dev/null
 exit
 ```

@@ -53,6 +53,7 @@ metadata:
   name: web
   namespace: demo
 spec:
+  ingressClassName: nginx
   rules:
     - host: web.local
       http:
