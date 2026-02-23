@@ -94,4 +94,4 @@ curl -H 'Host: web.local' http://localhost:8080/ -fsS > /dev/null
 - kind のポートマッピングがないため、ローカルから `localhost` で到達できない
 
 ## まとめ / 次に読む
-- 次に読む: 第8章：ConfigMapとSecret（/chapters/chapter08/）
+- 次に読む: [第8章：ConfigMapとSecret](../chapter08/)

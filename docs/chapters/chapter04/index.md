@@ -79,4 +79,4 @@ kubectl -n demo describe pod -l app.kubernetes.io/name=web
 - requests を設定せず、ノード逼迫時にスケジューリングや安定性が崩れる
 
 ## まとめ / 次に読む
-- 次に読む: 第5章：Deploymentとロールアウト（/chapters/chapter05/）
+- 次に読む: [第5章：Deploymentとロールアウト](../chapter05/)

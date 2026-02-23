@@ -68,4 +68,4 @@ kubectl -n demo rollout status deploy/web
 - readiness が整備されていない状態でローリングアップデートし、サービス品質を落とす
 
 ## まとめ / 次に読む
-- 次に読む: 第6章：Serviceと名前解決（/chapters/chapter06/）
+- 次に読む: [第6章：Serviceと名前解決](../chapter06/)

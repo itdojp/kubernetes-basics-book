@@ -76,4 +76,4 @@ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 - 暫定復旧（再起動）だけで終わり、恒久対応（原因の除去）が残る
 
 ## まとめ / 次に読む
-- 次に読む: 付録A（kubectlクイックリファレンス）や付録B（スニペット集）も参照してください。
+- 次に読む: [付録A：kubectlクイックリファレンス](../../appendices/appendix-a/) と [付録B：マニフェストスニペット集](../../appendices/appendix-b/) も参照してください。

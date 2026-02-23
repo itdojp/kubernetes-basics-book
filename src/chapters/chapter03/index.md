@@ -128,4 +128,4 @@ kubectl explain deployment.spec.selector
 - `kubectl apply` と `kubectl create` を混在させ、意図せずマニフェストが単一の正に戻らない
 
 ## まとめ / 次に読む
-- 次に読む: 第4章：Pod設計（/chapters/chapter04/）
+- 次に読む: [第4章：Pod設計](../chapter04/)

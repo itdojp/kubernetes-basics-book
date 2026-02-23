@@ -67,4 +67,4 @@ exit
 - DNS の前提（CoreDNS）を意識せずに名前解決障害を切り分けられない
 
 ## まとめ / 次に読む
-- 次に読む: 第7章：Ingress（/chapters/chapter07/）
+- 次に読む: [第7章：Ingress](../chapter07/)

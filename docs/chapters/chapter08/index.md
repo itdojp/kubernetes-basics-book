@@ -72,4 +72,4 @@ kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/
 - 設定を増やしすぎて、どこが正（source of truth）か分からなくなる
 
 ## まとめ / 次に読む
-- 次に読む: 第9章：ストレージ基礎（/chapters/chapter09/）
+- 次に読む: [第9章：ストレージ基礎](../chapter09/)

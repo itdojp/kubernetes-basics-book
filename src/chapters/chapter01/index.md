@@ -72,4 +72,4 @@ kubectl explain deployment.spec.template.spec.containers
 - Ingress を「単体機能」と誤解し、Ingress Controller の存在を見落とす
 
 ## まとめ / 次に読む
-- 次に読む: 第2章：ローカル環境とkubectl（/chapters/chapter02/）
+- 次に読む: [第2章：ローカル環境とkubectl](../chapter02/)

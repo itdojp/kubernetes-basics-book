@@ -139,4 +139,4 @@ kind delete cluster --name kbb
 ```
 
 ## まとめ / 次に読む
-- 次に読む: 第3章：YAML基礎とメタデータ設計（/chapters/chapter03/）
+- 次に読む: [第3章：YAML基礎とメタデータ設計](../chapter03/)
