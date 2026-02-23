@@ -51,7 +51,12 @@ kubectl -n demo create secret generic web-secret --from-literal=password=change-
 kubectl -n demo get secret web-secret
 ```
 
-3) Deployment に注入します（例: 付録B のスニペットを参照し、`envFrom` と volume mount を追加します）。
+3) Deployment に注入します（`envFrom` と Secret の volume mount を追加します）。
+
+```bash
+kubectl -n demo patch deploy web --type strategic -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
+kubectl -n demo rollout status deploy/web
+```
 
 4) Pod で確認します。
 
