@@ -5,54 +5,71 @@ title: "第8章：ConfigMapとSecret"
 ---
 # 第8章：ConfigMapとSecret
 
-設定の外部化、マウント/環境変数
+アプリケーション設定をコンテナイメージに埋め込むと、環境差分や秘密情報の取り扱いが困難になります。  
+Kubernetes では ConfigMap/Secret を使い、設定を外部化して注入します。
 
 ## 学習目標
-- （例）この章の主要概念を説明できる
-- （例）最小構成のマニフェストを読み書きできる
+- ConfigMap と Secret の目的と違いを説明できる
+- 環境変数/ファイルマウントの注入パターンを使い分けられる
+- Secret を Git に平文で置かない運用の前提を理解する
 
 ## 扱う範囲 / 扱わない範囲
 
 ### 扱う範囲
-- （例）基本概念、代表的な設計判断、最低限の動作確認
+- ConfigMap と Secret の基本
+- 注入パターン（env / envFrom / volume mount）
+- 変更時の注意点（再起動が必要になるケース）
 
 ### 扱わない範囲
-- （例）クラスタ設計/運用の深掘り（別冊「Kubernetesクラスタ設計・運用実践ガイド」を参照）
+- 外部シークレット管理（KMS/Vault/External Secrets 等）の詳細
+- 暗号化 at rest の設計（運用編で扱う）
 
-## 前提知識・準備
-- kubectl の基本操作（未習の場合は第2章を先に参照）
-- （推奨）コンテナ基礎（詳細は Podman 本を参照）: https://itdojp.github.io/podman-book/
+## ConfigMap
+- 非秘密情報を扱います（設定値、フラグ、テンプレ等）。
+- `data` はキー/値（文字列）です。
+- サイズや更新頻度を考慮します（大きなバイナリは置きません）。
 
-## 章の要点
-- （要点）
-- （要点）
-- （要点）
+## Secret
+- 秘密情報を扱います（パスワード、トークン等）。
+- `data` は base64 で格納されますが、暗号化ではありません。
+- Git にコミットする運用は原則避けます（少なくとも平文で管理しません）。
 
-## ハンズオン（最小）
+## 注入パターン
+- env: 個別キーを環境変数へ注入
+- envFrom: ConfigMap/Secret 全体をまとめて環境変数へ注入
+- volume: ファイルとしてマウント（証明書等に向く）
 
-### 1. 状態確認
+## ハンズオン：ConfigMap/Secret を注入する
+前提: `demo` namespace に Deployment `web` が存在していること。
+
+1) ConfigMap を作成します。
+
 ```bash
-kubectl version --client
-kubectl get ns
+kubectl -n demo create configmap web-config --from-literal=APP_ENV=dev
+kubectl -n demo get configmap web-config
 ```
 
-### 2. 最小マニフェスト（例）
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: hello
-spec:
-  containers:
-    - name: hello
-      image: nginx:stable
-      ports:
-        - containerPort: 80
+2) Secret を作成します。
+
+```bash
+kubectl -n demo create secret generic web-secret --from-literal=password=change-me
+kubectl -n demo get secret web-secret
+```
+
+3) Deployment に注入します（例: 付録B のスニペットを参照し、`envFrom` と volume mount を追加します）。
+
+4) Pod で確認します。
+
+```bash
+POD=$(kubectl -n demo get pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance=demo -o name | head -n 1)
+kubectl -n demo exec -it "$POD" -- sh -c 'env | grep APP_ENV || true'
+kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/password'
 ```
 
 ## よくある落とし穴
-- （例）Label/Selector の不整合により、意図した Service 配下にならない
-- （例）Probe/Resource 未設定のまま本番相当で運用してしまう
+- Secret の base64 を暗号化と誤解し、平文に近い形で配布してしまう
+- 設定変更時に Pod の再起動が必要なパターンを見落とす
+- 設定を増やしすぎて、どこが正（source of truth）か分からなくなる
 
 ## まとめ / 次に読む
 - 次に読む: 第9章：ストレージ基礎（/chapters/chapter09/）
