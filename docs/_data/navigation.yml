@@ -1,0 +1,39 @@
+introduction:
+  - title: "はじめに"
+    path: "/introduction/"
+
+chapters:
+  - title: "第0章：コンテナ基礎ダイジェスト"
+    path: "/chapters/chapter00/"
+  - title: "第1章：Kubernetesの全体像"
+    path: "/chapters/chapter01/"
+  - title: "第2章：ローカル環境とkubectl"
+    path: "/chapters/chapter02/"
+  - title: "第3章：YAML基礎とメタデータ設計"
+    path: "/chapters/chapter03/"
+  - title: "第4章：Pod設計"
+    path: "/chapters/chapter04/"
+  - title: "第5章：Deploymentとロールアウト"
+    path: "/chapters/chapter05/"
+  - title: "第6章：Serviceと名前解決"
+    path: "/chapters/chapter06/"
+  - title: "第7章：Ingress"
+    path: "/chapters/chapter07/"
+  - title: "第8章：ConfigMapとSecret"
+    path: "/chapters/chapter08/"
+  - title: "第9章：ストレージ基礎"
+    path: "/chapters/chapter09/"
+  - title: "第10章：基本トラブルシューティング"
+    path: "/chapters/chapter10/"
+
+appendices:
+  - title: "付録A：kubectlクイックリファレンス"
+    path: "/appendices/appendix-a/"
+  - title: "付録B：マニフェストスニペット集"
+    path: "/appendices/appendix-b/"
+  - title: "付録C：参考リンク集"
+    path: "/appendices/appendix-c/"
+
+afterword:
+  - title: "あとがき"
+    path: "/afterword/"

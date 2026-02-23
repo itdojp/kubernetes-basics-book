@@ -1,0 +1,52 @@
+# Starter Jekyll config for new book repos (project Pages)
+# Customize the values marked with <...>
+
+title: "Kubernetes入門：PodからIngressまで（基礎と実践）"
+description: "Pod / Deployment / Service / Ingress を中心に、アプリケーションをKubernetesに載せるための基礎と実践を整理する。"
+author: "株式会社アイティードゥ"
+version: "1.0.0"
+lang: "ja"
+
+# Footer / contact / license (Book UI Spec v1)
+contact:
+  email: "knowledge@itdo.jp"
+license_text: "Content licensed under CC BY-NC-SA 4.0 (commercial use requires a separate agreement)."
+repository_branch: "main"
+
+# GitHub Pages settings
+url: "https://itdojp.github.io"
+baseurl: "/kubernetes-basics-book"
+repository: "itdojp/kubernetes-basics-book"
+
+# Jekyll settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+theme: minima
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "book"
+
+exclude:
+  - node_modules/
+  - scripts/
+  - templates/
+  - README.md
+  - Gemfile*
+  - vendor/
