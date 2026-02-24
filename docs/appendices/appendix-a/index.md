@@ -26,6 +26,7 @@ title: "付録A：kubectlクイックリファレンス"
 | ラベル検索 | `kubectl -n <ns> get pod -l key=value` |
 
 補足:
+- `kubectl get all` はすべてのリソースを表示しません（Ingress/ConfigMap/Secret 等は含まれません）。
 - `--sort-by=.lastTimestamp` が期待どおりでない場合は、`--sort-by=.metadata.creationTimestamp` を試してください。
 
 ## 適用（作成/更新/削除）

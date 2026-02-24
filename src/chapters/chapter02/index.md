@@ -45,7 +45,8 @@ Ingress を後続章で扱うため、control-plane ノードに `ingress-ready=
 
 1) `kind.yaml` を作成します。
 
-```yaml
+```bash
+cat > kind.yaml <<'YAML'
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 name: kbb
@@ -64,6 +65,7 @@ nodes:
       - containerPort: 443
         hostPort: 8443
         protocol: TCP
+YAML
 ```
 
 2) クラスタ作成と確認を行います。

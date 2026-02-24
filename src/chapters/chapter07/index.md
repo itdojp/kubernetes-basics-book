@@ -35,6 +35,12 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl -n ingress-nginx get pods -w
 ```
 
+補足: `get pods -w` の代替として、`rollout status` で待つこともできます。
+
+```bash
+kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller
+```
+
 2) Controller が Ready になることを確認します。
 
 ```bash
@@ -78,9 +84,10 @@ kubectl -n demo describe ingress web
 
 3) ローカルから到達確認します（Host ヘッダを付与します）。
 
+補足: apply 直後は反映に数秒かかることがあります（その場合は数秒待って再実行してください）。
+
 ```bash
-## 補足: apply 直後は反映に数秒かかることがあります（その場合は数秒待って再実行してください）
-curl -H 'Host: web.local' http://localhost:8080/ -fsS > /dev/null
+curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 ```
 
 ### （任意）ブラウザで確認する
