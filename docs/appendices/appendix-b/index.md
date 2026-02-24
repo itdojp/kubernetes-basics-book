@@ -121,6 +121,10 @@ spec:
 ## Ingress（HTTP ルーティングの最小）
 前提: Ingress Controller がクラスタに導入済みであること。
 
+置換ポイント（例）:
+- `metadata.name` / `metadata.namespace`
+- `spec.rules[].host`
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -128,6 +132,7 @@ metadata:
   name: web
   namespace: demo
 spec:
+  ingressClassName: nginx
   rules:
     - host: web.local
       http:
@@ -141,7 +146,20 @@ spec:
                   number: 80
 ```
 
+補足:
+- `ingressClassName` の要否や値は環境により異なります（デフォルトの IngressClass が設定済み、別の Controller を利用、など）。
+
 ## ConfigMap（環境変数で注入）
+
+構成:
+- ConfigMap
+- Deployment（環境変数の注入例）
+
+置換ポイント（例）:
+- ConfigMap: `metadata.name` / `metadata.namespace` / `data`
+- Deployment: `metadata.name` / `metadata.namespace` / 参照する ConfigMap 名（`envFrom.configMapRef.name`）
+
+### ConfigMap
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -152,6 +170,7 @@ data:
   APP_ENV: "dev"
 ```
 
+### Deployment 側（envFrom で注入）
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -178,6 +197,16 @@ spec:
 ```
 
 ## Secret（ファイルとしてマウント）
+
+構成:
+- Secret
+- Deployment（マウント例）
+
+置換ポイント（例）:
+- Secret: `metadata.name` / `metadata.namespace` / `stringData`
+- Deployment: `metadata.name` / `metadata.namespace` / 参照する Secret 名（`volumes[].secret.secretName`）
+
+### Secret
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -189,6 +218,7 @@ stringData:
   password: "change-me"
 ```
 
+### Deployment 側（volumeMounts / volumes）
 ```yaml
 apiVersion: apps/v1
 kind: Deployment

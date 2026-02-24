@@ -33,6 +33,12 @@ title: "第2章：ローカル環境とkubectl"
 
 本書の記述は kind 前提で記載し、差分が大きい場合は補足します。
 
+補足:
+- kind はローカルのコンテナ実行環境（一般には Docker）を利用します。
+- Docker を使えない場合は、代替として minikube を検討してください。
+- Podman で kind を動かすこともできますが experimental 扱いです。詳細は公式ドキュメントを参照してください。
+  - https://kind.sigs.k8s.io/
+
 ## kubectl のインストール
 kubectl は Kubernetes の minor バージョンに揃えることを推奨します。  
 インストール手順は公式Docsを参照してください。
@@ -72,6 +78,8 @@ nodes:
         protocol: TCP
 YAML
 ```
+
+補足: 上記の `kind.yaml` では `name: kbb` を指定しているため、クラスタ名は `kbb` になります。
 
 2) クラスタ作成と確認を行います。
 

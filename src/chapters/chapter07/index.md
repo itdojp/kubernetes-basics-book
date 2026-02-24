@@ -35,6 +35,12 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl -n ingress-nginx get pods -w
 ```
 
+補足:
+- 本書では再現性のため ingress-nginx のマニフェストを特定バージョンに固定しています。
+- 更新する場合は ingress-nginx の公式リリース/インストールドキュメントを確認してください。
+  - https://github.com/kubernetes/ingress-nginx/releases
+  - https://kubernetes.github.io/ingress-nginx/
+
 補足: `get pods -w` の代替として、`rollout status` で待つこともできます。
 
 ```bash
