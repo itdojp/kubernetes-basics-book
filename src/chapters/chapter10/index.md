@@ -31,6 +31,8 @@
 kubectl -n demo get all
 kubectl -n demo describe pod <pod-name>
 kubectl -n demo get events --sort-by=.lastTimestamp
+# 補足: lastTimestamp が期待どおりでない場合
+kubectl -n demo get events --sort-by=.metadata.creationTimestamp
 kubectl -n demo logs <pod-name>
 ```
 

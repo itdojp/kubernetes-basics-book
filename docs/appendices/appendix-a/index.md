@@ -14,6 +14,7 @@ title: "付録A：kubectlクイックリファレンス"
 - `-A`: 全namespace（all namespaces）
 
 ## 観測（一覧/詳細）
+
 | 目的 | コマンド例 |
 | --- | --- |
 | リソース一覧 | `kubectl -n <ns> get all` |
@@ -24,7 +25,11 @@ title: "付録A：kubectlクイックリファレンス"
 | ラベル表示 | `kubectl -n <ns> get pod --show-labels` |
 | ラベル検索 | `kubectl -n <ns> get pod -l key=value` |
 
+補足:
+- `--sort-by=.lastTimestamp` が期待どおりでない場合は、`--sort-by=.metadata.creationTimestamp` を試してください。
+
 ## 適用（作成/更新/削除）
+
 | 目的 | コマンド例 |
 | --- | --- |
 | 適用 | `kubectl apply -f <file-or-dir>` |
@@ -32,6 +37,7 @@ title: "付録A：kubectlクイックリファレンス"
 | 差分確認 | `kubectl diff -f <file-or-dir>` |
 
 ## デバッグ
+
 | 目的 | コマンド例 |
 | --- | --- |
 | ログ | `kubectl -n <ns> logs <pod>` |
@@ -40,6 +46,7 @@ title: "付録A：kubectlクイックリファレンス"
 | port-forward | `kubectl -n <ns> port-forward svc/<svc> 8080:80` |
 
 ## 仕様確認（API）
+
 | 目的 | コマンド例 |
 | --- | --- |
 | リソース一覧 | `kubectl api-resources` |

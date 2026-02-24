@@ -44,9 +44,10 @@ kubectl -n ingress-nginx get svc,deploy,pod
 ## ハンズオン：Host ルーティングの最小構成
 前提: `demo` namespace に `web` Deployment と Service `web` が存在していること（第5章/第6章の状態）。
 
-1) Ingress を作成します。
+1) Ingress を作成して適用します。
 
-```yaml
+```bash
+kubectl -n demo apply -f - <<'YAML'
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -65,6 +66,7 @@ spec:
                 name: web
                 port:
                   number: 80
+YAML
 ```
 
 2) Ingress を確認します。
@@ -77,8 +79,18 @@ kubectl -n demo describe ingress web
 3) ローカルから到達確認します（Host ヘッダを付与します）。
 
 ```bash
+## 補足: apply 直後は反映に数秒かかることがあります（その場合は数秒待って再実行してください）
 curl -H 'Host: web.local' http://localhost:8080/ -fsS > /dev/null
 ```
+
+### （任意）ブラウザで確認する
+DNS が無い環境でも、hosts を使うとブラウザで確認できます（管理者権限が必要です）。
+
+```bash
+echo "127.0.0.1 web.local" | sudo tee -a /etc/hosts
+```
+
+そのうえで、ブラウザで `http://web.local:8080/` を開きます。
 
 ## TLS（入口）
 - Ingress の TLS は `spec.tls` で `secretName` を参照します。
