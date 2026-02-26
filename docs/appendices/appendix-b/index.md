@@ -196,6 +196,47 @@ spec:
                 name: web-config
 ```
 
+### まとめて apply したい場合（multi-doc YAML）
+ConfigMap と Deployment を `---` で区切って、まとめて適用できます。
+
+```bash
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  namespace: demo
+data:
+  APP_ENV: "dev"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/instance: demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/instance: demo
+    spec:
+      containers:
+        - name: web
+          image: nginx:stable
+          envFrom:
+            - configMapRef:
+                name: web-config
+          ports:
+            - containerPort: 80
+YAML
+```
+
 ## Secret（ファイルとしてマウント）
 
 構成:
@@ -247,6 +288,53 @@ spec:
         - name: secret
           secret:
             secretName: web-secret
+```
+
+### まとめて apply したい場合（multi-doc YAML）
+Secret と Deployment を `---` で区切って、まとめて適用できます。
+
+```bash
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-secret
+  namespace: demo
+type: Opaque
+stringData:
+  password: "change-me"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/instance: demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/instance: demo
+    spec:
+      containers:
+        - name: web
+          image: nginx:stable
+          volumeMounts:
+            - name: secret
+              mountPath: /etc/secret
+              readOnly: true
+          ports:
+            - containerPort: 80
+      volumes:
+        - name: secret
+          secret:
+            secretName: web-secret
+YAML
 ```
 
 ## 注意

@@ -104,8 +104,20 @@ curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 ### （任意）ブラウザで確認する
 DNS が無い環境でも、hosts を使うとブラウザで確認できます（管理者権限が必要です）。
 
+OS別の hosts ファイル:
+- macOS/Linux: `/etc/hosts`
+- Windows: `C:\Windows\System32\drivers\etc\hosts`
+
+macOS/Linux の例:
+
 ```bash
 echo "127.0.0.1 web.local" | sudo tee -a /etc/hosts
+```
+
+Windows の例（管理者権限で編集して追記）:
+
+```text
+127.0.0.1 web.local
 ```
 
 そのうえで、ブラウザで `http://web.local:8080/` を開きます。
