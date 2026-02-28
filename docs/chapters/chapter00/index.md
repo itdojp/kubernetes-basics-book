@@ -27,7 +27,7 @@ title: "第0章：コンテナ基礎ダイジェスト"
 - コンテナネットワークの内部実装（CNI の詳細など）
 
 必要に応じて以下を参照してください。
-- Podman 完全ガイド: https://itdojp.github.io/podman-book/
+- [Podman完全ガイド](https://itdojp.github.io/podman-book/)
 
 ## 1. イメージとコンテナ
 - イメージ: 実行に必要なファイル一式をまとめたテンプレート
