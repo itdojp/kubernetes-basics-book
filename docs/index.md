@@ -15,7 +15,7 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションをK
 ## 本書のスコープ
 - 本書は「アプリを Kubernetes に載せる基礎」として、Pod / Deployment / Service / Ingress を中心に扱います。
 - コンテナ基礎（名前空間/cgroups、イメージ、ネットワーク、ボリューム等）は深掘りせず、必要に応じて [Podman完全ガイド](https://itdojp.github.io/podman-book/) を参照します。
-- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は別冊に委譲します: [Kubernetesクラスタ運用（別冊）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
+- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は別冊に委譲します: [Kubernetesクラスタ運用（別冊）](https://itdojp.github.io/kubernetes-cluster-ops-book/)。
 
 ## 目次
 - [はじめに](introduction/)

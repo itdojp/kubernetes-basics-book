@@ -24,7 +24,7 @@ title: "はじめに"
 
 ### 扱わない範囲
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
-  - 必要に応じて Podman 本を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
+  - 必要に応じて『Podman完全ガイド』を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
   - 別冊: [Kubernetesクラスタ運用（別冊）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
 
