@@ -120,7 +120,7 @@
 - `demo` namespace に Service `web` が存在し、Pod から名前解決できる
 
 - [ ] 端末: `kubectl -n demo get svc` / `kubectl -n demo describe svc web`
-- [ ] 端末: `kubectl -n demo get endpointslice`（エンドポイント確認）
+- [ ] 端末: `kubectl -n demo get endpointslice -l kubernetes.io/service-name=web`（エンドポイント確認）
 - [ ] 端末: Pod 内での名前解決確認（`kubectl -n demo exec ... -- nslookup web` 等）
 
 ### 第7章：Ingress
@@ -130,7 +130,7 @@
 - ingress-nginx が導入済みで Ready
 - `demo` namespace に `web` Deployment/Service が存在
 
-- [ ] 端末: `kubectl -n ingress-nginx get pod`（Ready が分かる）
+- [ ] 端末: `kubectl -n ingress-nginx get pods -w`（Ready が分かる）
 - [ ] 端末: `kubectl -n demo get ingress` / `kubectl -n demo describe ingress web`
 - [ ] 端末: 到達確認（`curl -fsS -H 'Host: web.local' http://localhost:8080/` の結果）
 - [ ] （任意）ブラウザ: `http://web.local:8080/` の表示（hosts 追記を行う場合）
@@ -158,7 +158,7 @@
 前提（例）:
 - 意図的に異常状態を再現できる（例: 存在しない image、誤った設定、リソース不足等）
 
-- [ ] 端末: `kubectl get pod` の典型異常状態（CrashLoopBackOff / ImagePullBackOff / Pending 等）
-- [ ] 端末: `kubectl describe pod ...` の Events 抜粋（原因の手掛かりが分かる）
-- [ ] 端末: `kubectl logs ...` の典型例（エラーが分かる）
-- [ ] 端末: `kubectl get events --sort-by=...`（時系列/優先度で追える）
+- [ ] 端末: `kubectl -n demo get pod` の典型異常状態（CrashLoopBackOff / ImagePullBackOff / Pending 等）
+- [ ] 端末: `kubectl -n demo describe pod ...` の Events 抜粋（原因の手掛かりが分かる）
+- [ ] 端末: `kubectl -n demo logs ...` の典型例（エラーが分かる）
+- [ ] 端末: `kubectl -n demo get events --sort-by=.lastTimestamp`（時系列/優先度で追える。補足: `--sort-by=.metadata.creationTimestamp` でも可）
