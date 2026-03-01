@@ -49,3 +49,116 @@
 1. 画像を配置し、本文から参照を追加
 2. `npm run build`
 3. `npm run serve` で表示崩れ/リンク切れがないことを確認
+
+## スクリーンショット候補チェックリスト（章別）
+
+本セクションは Issue #7 の内容を、本文の手順に沿って「何を撮るか」「前提状態」を章別に整理したチェックリストです（画像追加は別PRで実施）。
+
+補足:
+- CLI 例は `kubectl -n demo ...` のように namespace を明示し、コンテキスト依存を減らす。
+- `demo` namespace / `web` Deployment / `web` Service は複数章で共通に登場するため、スクリーンショット取得前に状態を揃える。
+
+### 第0章：コンテナ基礎ダイジェスト
+
+前提（例）:
+- Docker または Podman が利用可能
+- Nginx イメージ取得が可能（ネットワーク/プロキシ等）
+
+- [ ] 端末: `docker version` / `podman version` の出力（実行環境が分かる）
+- [ ] 端末: pull → run →（到達確認）→ logs → stop の最小フロー（Nginx で HTTP 応答が返る）
+
+### 第1章：Kubernetesの全体像
+
+前提（例）:
+- `kubectl` インストール済み
+- クラスタへ接続できる kubeconfig/context が選択済み
+
+- [ ] 端末: `kubectl version --client`（クライアント確認）
+- [ ] 端末: `kubectl cluster-info`（接続先確認）
+- [ ] 端末: `kubectl get nodes`（ノード一覧）
+
+### 第2章：ローカル環境とkubectl
+
+前提（例）:
+- `kind` が利用可能
+- kind の port mapping（`8080/8443`）を含む `kind.yaml` を作成する
+
+- [ ] エディタ: `kind.yaml` の作成（port mapping が分かる）
+- [ ] 端末: `kind create cluster --config kind.yaml` の実行結果
+- [ ] 端末: `kubectl cluster-info` / `kubectl get nodes -o wide`（クラスタ作成後の最小確認）
+- [ ] 端末: namespace 一覧/指定の例（`kubectl get ns` / `kubectl -n demo get ...`）
+- [ ] （任意）GUI: kind ノードコンテナが見える画面（Docker Desktop / Podman Desktop の Containers 画面）
+
+### 第3章：YAML基礎とメタデータ設計
+
+前提（例）:
+- `demo` namespace にサンプルの Deployment 等を作成できる状態
+
+- [ ] エディタ: YAML の構造（`apiVersion/kind/metadata/spec`）が分かる状態
+- [ ] エディタ: labels と selector の対応関係が分かる状態
+- [ ] 端末: `kubectl -n demo get deploy,pod --show-labels`（labels の確認）
+
+### 第4章：Pod設計
+
+前提（例）:
+- `demo` namespace に対象 Pod が存在し、describe で情報が取れる
+
+- [ ] 端末: `kubectl -n demo describe pod ...` の主要部（Probe/resources/Conditions/Events）
+
+### 第5章：Deploymentとロールアウト
+
+前提（例）:
+- `demo` namespace に Deployment `web` が存在し、ロールアウトが発生する差分を適用できる
+
+- [ ] 端末: `kubectl -n demo rollout status deploy/web`（進行状況）
+- [ ] 端末: `kubectl -n demo rollout history deploy/web`（履歴）
+- [ ] 端末: `kubectl -n demo get rs,pod`（ReplicaSet と Pod の切替が分かる状態）
+
+### 第6章：Serviceと名前解決
+
+前提（例）:
+- `demo` namespace に Service `web` が存在し、Pod から名前解決できる
+
+- [ ] 端末: `kubectl -n demo get svc` / `kubectl -n demo describe svc web`
+- [ ] 端末: `kubectl -n demo get endpointslice -l kubernetes.io/service-name=web`（エンドポイント確認）
+- [ ] 端末: Pod 内での名前解決確認（`kubectl -n demo exec ... -- nslookup web` 等）
+
+### 第7章：Ingress
+
+前提（例）:
+- kind の port mapping によりホスト側 `8080/8443` で到達できる
+- ingress-nginx が導入済みで Ready
+- `demo` namespace に `web` Deployment/Service が存在
+
+- [ ] 端末: `kubectl -n ingress-nginx get pods -w`（Ready が分かる）
+- [ ] 端末: `kubectl -n demo get ingress` / `kubectl -n demo describe ingress web`
+- [ ] 端末: 到達確認（`curl -fsS -H 'Host: web.local' http://localhost:8080/` の結果）
+- [ ] （任意）ブラウザ: `http://web.local:8080/` の表示（hosts 追記を行う場合）
+
+### 第8章：ConfigMapとSecret
+
+前提（例）:
+- `demo` namespace に ConfigMap/Secret を作成済み
+- Pod に環境変数注入/ファイルマウントが設定済み
+
+- [ ] 端末: `kubectl -n demo get configmap,secret`
+- [ ] 端末: ConfigMap の反映確認（`kubectl exec ... -- env` 等で該当箇所が見える）
+- [ ] 端末: Secret のマウント確認（`kubectl exec` でマウントファイルを確認。値は極力表示しない）
+
+### 第9章：ストレージ基礎
+
+前提（例）:
+- `demo` namespace で PVC を作成し、PV と binding される環境（例: kind の標準 StorageClass）
+
+- [ ] 端末: `kubectl -n demo get pvc,pv` / `kubectl -n demo describe pvc ...`
+- [ ] 端末: Events（Binding/Attach/Mount）が分かる状態
+
+### 第10章：基本トラブルシューティング
+
+前提（例）:
+- 意図的に異常状態を再現できる（例: 存在しない image、誤った設定、リソース不足等）
+
+- [ ] 端末: `kubectl -n demo get pod` の典型異常状態（CrashLoopBackOff / ImagePullBackOff / Pending 等）
+- [ ] 端末: `kubectl -n demo describe pod ...` の Events 抜粋（原因の手掛かりが分かる）
+- [ ] 端末: `kubectl -n demo logs ...` の典型例（エラーが分かる）
+- [ ] 端末: `kubectl -n demo get events --sort-by=.lastTimestamp`（時系列/優先度で追える。補足: `--sort-by=.metadata.creationTimestamp` でも可）
