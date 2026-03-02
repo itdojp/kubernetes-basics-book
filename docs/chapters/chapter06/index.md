@@ -61,6 +61,10 @@ wget -qO- http://web/ > /dev/null
 exit
 ```
 
+出力例（EndpointSlice / 名前解決 / Service 到達性）:
+
+![Service と DNS の確認（例）](./images/ch06-service-dns-01.png)
+
 ## よくある落とし穴
 - selector が一致せず、Endpoints が空になる（`kubectl describe svc` で確認する）
 - `targetPort` の誤りで到達できない
