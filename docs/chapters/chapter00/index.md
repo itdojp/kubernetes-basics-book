@@ -27,7 +27,7 @@ title: "第0章：コンテナ基礎ダイジェスト"
 - コンテナネットワークの内部実装（CNI の詳細など）
 
 必要に応じて以下を参照してください。
-- [Podman完全ガイド](https://itdojp.github.io/podman-book/)
+- Podman 完全ガイド: https://itdojp.github.io/podman-book/
 
 ## 1. イメージとコンテナ
 - イメージ: 実行に必要なファイル一式をまとめたテンプレート
@@ -64,6 +64,16 @@ Kubernetes はコンテナを直接実行するのではなく、ノード上の
 
 - Docker または Podman を使い、Nginx を起動して HTTP で応答が返ることを確認する
 - 手順は Podman 本の該当章を参照する
+
+出力例（Podman の場合）:
+
+Podman のバージョン確認:
+
+![podman version（例）](./images/ch00-podman-version-01.png)
+
+Nginx を起動し、HTTP 応答とログを確認する（例）:
+
+![Nginx の起動と疎通確認（例）](./images/ch00-nginx-http-02.png)
 
 ## よくある落とし穴
 - 「コンテナ内ポート」と「外部公開」の区別が曖昧なまま Service/Ingress を理解しようとする

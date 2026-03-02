@@ -96,6 +96,10 @@ kubectl create namespace demo
 kubectl get ns
 ```
 
+出力例（`kind.yaml` の確認〜クラスタ作成〜Namespace 作成）:
+
+![kind クラスタの作成と確認（例）](./images/ch02-kind-bootstrap-01.png)
+
 ## kubectl 基本操作（最小セット）
 
 ### 1. 観測（get / describe）

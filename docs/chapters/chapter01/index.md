@@ -72,6 +72,10 @@ kubectl explain pod
 kubectl explain deployment.spec.template.spec.containers
 ```
 
+出力例（`kubectl api-resources` / `kubectl explain`）:
+
+![kubectl で API を探索する（例）](./images/ch01-kubectl-explore-01.png)
+
 ## よくある落とし穴
 - 「Pod を直接作る」だけで運用し、更新・回復・スケールの仕組みを使わない
 - Ingress を「単体機能」と誤解し、Ingress Controller の存在を見落とす
