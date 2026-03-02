@@ -54,6 +54,10 @@ kubectl -n demo rollout status deploy/web
 kubectl -n demo get rs
 ```
 
+出力例（更新により ReplicaSet が切り替わることの確認）:
+
+![ロールアウトと ReplicaSet の切り替え（例）](./images/ch05-rollout-rs-01.png)
+
 4) 履歴を確認します。
 
 ```bash
