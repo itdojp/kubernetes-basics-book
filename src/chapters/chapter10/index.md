@@ -67,6 +67,10 @@ kubectl -n demo patch svc web -p '{"spec":{"selector":{"app.kubernetes.io/name":
 kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 ```
 
+出力例（selector 不整合→Endpoints が空→原因確認→復旧）:
+
+![Service の selector 不整合の切り分け（例）](./images/ch10-service-selector-debug-01.png)
+
 ## よくある落とし穴
 - events を見ずにログだけ追い、原因特定に時間がかかる
 - namespace を誤り、別環境を見てしまう

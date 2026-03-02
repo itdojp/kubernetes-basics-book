@@ -96,6 +96,10 @@ kubectl -n demo get pvc web-pvc
 kubectl -n demo exec pvc-check -- cat /data/hello.txt
 ```
 
+出力例（PVC 作成〜Pod でのマウント〜データ永続化の確認）:
+
+![PVC の作成とマウント（例）](./images/ch09-pvc-mount-01.png)
+
 5) 片付け（任意）
 
 ```bash
