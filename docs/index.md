@@ -54,6 +54,7 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 - [付録B：マニフェストスニペット集](appendices/appendix-b/)
 - [付録C：参考リンク集](appendices/appendix-c/)
 
+## あとがき
 - [あとがき](afterword/)
 
 ## ライセンス
