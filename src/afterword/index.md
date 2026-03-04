@@ -9,8 +9,8 @@
 - YAML と metadata（Label/Selector/Namespace）の品質が、運用性に直結します。
 
 ## 次に読む
-- Kubernetesクラスタ設計・運用実践ガイド（運用編）: https://itdojp.github.io/kubernetes-cluster-ops-book/
-- Podman完全ガイド（コンテナ基礎）: https://itdojp.github.io/podman-book/
+- [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
+- [Podman完全ガイド（コンテナ基礎）](https://itdojp.github.io/podman-book/)
 
 ## フィードバック
 - Issue: https://github.com/itdojp/kubernetes-basics-book/issues
