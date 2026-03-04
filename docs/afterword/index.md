@@ -18,5 +18,5 @@ title: "あとがき"
 - [Podman完全ガイド（コンテナ基礎）](https://itdojp.github.io/podman-book/)
 
 ## フィードバック
-- Issue: https://github.com/itdojp/kubernetes-basics-book/issues
+- Issue: [GitHub Issues](https://github.com/itdojp/kubernetes-basics-book/issues)
 - Email: knowledge@itdo.jp

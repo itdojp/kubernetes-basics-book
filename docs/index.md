@@ -15,7 +15,7 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 ## 本書のスコープ
 - 本書は「アプリを Kubernetes に載せる基礎」として、Pod / Deployment / Service / Ingress を中心に扱います。
 - コンテナ基礎（名前空間/cgroups、イメージ、ネットワーク、ボリューム等）は深掘りせず、必要に応じて [Podman完全ガイド](https://itdojp.github.io/podman-book/) を参照します。
-- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は別冊に委譲します: [Kubernetesクラスタ運用（別冊）](https://itdojp.github.io/kubernetes-cluster-ops-book/)。
+- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は別冊に委譲します: [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)。
 
 ## 学習成果
 - Kubernetes の宣言的管理と主要リソースの役割を理解する
@@ -37,14 +37,14 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 ## 本編
 
 - [第0章：コンテナ基礎ダイジェスト](chapters/chapter00/)
-- [第1章：Kubernetes の全体像](chapters/chapter01/)
-- [第2章：ローカル環境と kubectl](chapters/chapter02/)
+- [第1章：Kubernetesの全体像](chapters/chapter01/)
+- [第2章：ローカル環境とkubectl](chapters/chapter02/)
 - [第3章：YAML基礎とメタデータ設計](chapters/chapter03/)
 - [第4章：Pod設計](chapters/chapter04/)
-- [第5章：Deployment とロールアウト](chapters/chapter05/)
-- [第6章：Service と名前解決](chapters/chapter06/)
+- [第5章：Deploymentとロールアウト](chapters/chapter05/)
+- [第6章：Serviceと名前解決](chapters/chapter06/)
 - [第7章：Ingress](chapters/chapter07/)
-- [第8章：ConfigMap と Secret](chapters/chapter08/)
+- [第8章：ConfigMapとSecret](chapters/chapter08/)
 - [第9章：ストレージ基礎](chapters/chapter09/)
 - [第10章：基本トラブルシューティング](chapters/chapter10/)
 

@@ -19,9 +19,9 @@
 
 ### 扱わない範囲
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
-  - 必要に応じて Podman 本を参照: https://itdojp.github.io/podman-book/
+  - 必要に応じて『Podman完全ガイド』を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
-  - 別冊: https://itdojp.github.io/kubernetes-cluster-ops-book/
+  - 別冊: [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
 
 ## 前提知識・準備
 - Linux の基本操作（シェル、ファイル、ネットワークの基礎）
@@ -60,7 +60,7 @@
   - `app.kubernetes.io/instance: demo`
 
 ## 読み方ガイド
-- 初学者は、第1章→第2章→第3章→第4章→第5章→第6章→第7章の順に進めてください。
+- コンテナに不慣れな場合は、第0章→第1章→第2章→第3章→第4章→第5章→第6章→第7章の順に進めてください（既にコンテナを扱える場合は第0章はスキップ可）。
 - 既に kubectl を扱える場合は、第3章（metadata 設計）から読み始めても問題ありません。
 - まず動かすことを優先する場合は、第2章→第5章→第6章→第7章を先行し、必要に応じて概念章へ戻ってください。
 
@@ -72,7 +72,7 @@ kubectl config current-context
 ```
 
 ## フィードバック
-- Issue: https://github.com/itdojp/kubernetes-basics-book/issues
+- Issue: [GitHub Issues](https://github.com/itdojp/kubernetes-basics-book/issues)
 - Email: knowledge@itdo.jp
 
 ## 次に読む
