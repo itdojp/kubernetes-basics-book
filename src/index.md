@@ -1,6 +1,6 @@
 # Kubernetes入門：PodからIngressまで（基礎と実践）
 
-Pod / Deployment / Service / Ingress を中心に、アプリケーションをKubernetesに載せるための基礎と実践を整理します。
+Pod / Deployment / Service / Ingress を中心に、アプリケーションを Kubernetes に載せるための基礎と実践を整理します。
 
 ## 想定読者
 - Kubernetes にアプリケーションを配置する基礎を体系的に学びたいエンジニア
