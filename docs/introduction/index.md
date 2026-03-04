@@ -24,9 +24,9 @@ title: "はじめに"
 
 ### 扱わない範囲
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
-  - 必要に応じて『Podman完全ガイド』を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
+  - 必要に応じて Podman 本を参照: https://itdojp.github.io/podman-book/
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
-  - 別冊: [Kubernetesクラスタ運用（別冊）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
+  - 別冊: https://itdojp.github.io/kubernetes-cluster-ops-book/
 
 ## 前提知識・準備
 - Linux の基本操作（シェル、ファイル、ネットワークの基礎）
@@ -34,9 +34,9 @@ title: "はじめに"
 - （推奨）コンテナの概念（イメージ/コンテナ、ポート、ボリューム）
 
 ## 学習環境（動作確認）
-本書のコマンド例は、以下の構成で動作確認します。
+本書のコマンド例は、以下の構成で動作確認しています（動作確認: 2026-02-23）。
 
-- Kubernetes: v1.35 系（2026-02-23 時点の stable は v1.35.1）
+- Kubernetes: v1.35.1
 - kubectl: v1.35 系
 - ローカルクラスタ: kind v0.31.0
 - Ingress Controller: ingress-nginx controller-v1.14.3
@@ -77,7 +77,7 @@ kubectl config current-context
 ```
 
 ## フィードバック
-- Issue: [GitHub Issues](https://github.com/itdojp/kubernetes-basics-book/issues)
+- Issue: https://github.com/itdojp/kubernetes-basics-book/issues
 - Email: knowledge@itdo.jp
 
 ## 次に読む

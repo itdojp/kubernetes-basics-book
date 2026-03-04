@@ -6,7 +6,7 @@
 ## 表記
 - `<ns>`: namespace
 - `<name>`: リソース名
-- `-A`: 全namespace（all namespaces）
+- `-A`: 全 namespace（all namespaces）
 
 ## 観測（一覧/詳細）
 
@@ -50,7 +50,7 @@
 
 ## よく使うオプション
 - `-n <ns>`: namespace 指定
-- `-A`: 全namespace
+- `-A`: 全 namespace
 - `-o wide|yaml|json`: 出力形式
 - `--context <ctx>`: 対象クラスタ/コンテキスト指定
 - `--sort-by=<jsonpath>`: ソート
