@@ -87,8 +87,13 @@ kubectl get nodes -o wide
 3) Namespace を作成します（本書の共通ハンズオン）。
 
 ```bash
-kubectl create namespace demo
-kubectl get ns
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+YAML
+kubectl get ns demo
 ```
 
 ## kubectl 基本操作（最小セット）
@@ -156,8 +161,24 @@ kubectl -n demo get deploy,pod -o wide
 2) Service を作成します。
 
 ```bash
-kubectl -n demo expose deployment web --name web --port 80
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: demo
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+YAML
 kubectl -n demo get svc web
+kubectl -n demo get endpoints web
 ```
 
 3) port-forward で疎通します。

@@ -13,6 +13,66 @@ title: "付録B：マニフェストスニペット集"
 - Selector に使う labels は、Deployment/Service/Ingress で整合させます。
 - 複数リソースを1ファイルで管理する場合は `---` で区切ります。
 
+### 最小セット（適用と確認）
+以下は Namespace / Deployment / Service をまとめて適用し、kubectl で疎通まで確認する最小例です。
+
+```bash
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/instance: demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/instance: demo
+    spec:
+      containers:
+        - name: web
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: demo
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+YAML
+```
+
+確認:
+
+```bash
+kubectl get ns demo
+kubectl -n demo get deploy,svc,pod -o wide
+kubectl -n demo get endpoints web
+kubectl -n demo port-forward svc/web 8081:80
+curl -fsS http://localhost:8081/ > /dev/null
+```
+
 ## Namespace
 ```yaml
 apiVersion: v1

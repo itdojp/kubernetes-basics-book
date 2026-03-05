@@ -36,12 +36,13 @@ title: "はじめに"
 ## 学習環境（動作確認）
 本書のコマンド例は、以下の構成で動作確認します。
 
-- Kubernetes: v1.35 系（2026-02-23 時点の stable は v1.35.1）
+- Kubernetes: v1.35 系（動作確認: v1.35.1）
 - kubectl: v1.35 系
 - ローカルクラスタ: kind v0.31.0
 - Ingress Controller: ingress-nginx controller-v1.14.3
 
 補足:
+- Kubernetes / kind / ingress-nginx のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。
 - kind 以外（minikube など）でも実行できますが、Storage/Ingress など一部の章では差分が出ます。
 - 本書の YAML は可能な限り基本 API に寄せ、特定ベンダ固有の拡張は扱いません。
 
