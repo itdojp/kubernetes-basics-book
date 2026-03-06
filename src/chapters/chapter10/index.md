@@ -67,7 +67,7 @@ kubectl -n demo patch svc web -p '{"spec":{"selector":{"app.kubernetes.io/name":
 kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 ```
 
-出力例（selector 不整合→Endpoints が空→原因確認→復旧）:
+出力例（selector 不整合→Endpoints が空→原因確認→復旧。Endpoints/EndpointSlice の ADDRESSES が空で、`kubectl describe svc web` の Selector が Pod ラベルと不一致な点を確認）:
 
 ![Service の selector 不整合の切り分け（例）](./images/ch10-service-selector-debug-01.png)
 
