@@ -26,7 +26,7 @@ title: "はじめに"
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
   - 必要に応じて [Podman完全ガイド](https://itdojp.github.io/podman-book/) を参照
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
-  - 別冊: [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
+  - 別冊: https://itdojp.github.io/kubernetes-cluster-ops-book/
 
 ## 前提知識・準備
 - Linux の基本操作（シェル、ファイル、ネットワークの基礎）
