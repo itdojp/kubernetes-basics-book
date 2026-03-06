@@ -120,6 +120,10 @@ kubectl -n demo get pod -o wide
 kubectl -n demo describe pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance=demo
 ```
 
+出力例（Probe / Resources / Conditions / Events の確認）:
+
+![kubectl describe pod（例）](./images/ch04-kubectl-describe-pod-01.png)
+
 ## よくある落とし穴
 - readinessProbe を設定せず、起動直後にトラフィックが入り障害になる
 - livenessProbe を強くしすぎて、起動中や一時的な負荷で再起動ループになる

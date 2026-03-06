@@ -11,7 +11,7 @@ title: "付録B：マニフェストスニペット集"
 ## 使い方
 - まず `metadata.name` / `metadata.namespace` / labels を自分の環境に合わせて置換します。
 - Selector に使う labels は、Deployment/Service/Ingress で整合させます。
-- 複数リソースを1ファイルで管理する場合は `---` で区切ります。
+- 複数リソースを 1 ファイルで管理する場合は `---` で区切ります。
 
 ### 最小セット（適用と確認）
 以下は Namespace / Deployment / Service をまとめて適用し、kubectl で疎通まで確認する最小例です。

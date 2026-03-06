@@ -26,5 +26,5 @@ title: "付録C：参考リンク集"
 - kubectx / kubens（context/namespace 切替）: https://github.com/ahmetb/kubectx
 
 ## 次に読む
-- [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
-- [Podman完全ガイド（コンテナ基礎）](https://itdojp.github.io/podman-book/)
+- Kubernetes クラスタ設計・運用実践ガイド（運用編）: https://itdojp.github.io/kubernetes-cluster-ops-book/
+- Podman完全ガイド（コンテナ基礎）: https://itdojp.github.io/podman-book/

@@ -101,6 +101,10 @@ kubectl -n demo describe ingress web
 curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 ```
 
+出力例（ingress-nginx 導入〜Ingress 作成〜疎通確認）:
+
+![ingress-nginx の導入と Host ルーティング（例）](./images/ch07-ingress-nginx-01.png)
+
 ### （任意）ブラウザで確認する
 DNS が無い環境でも、hosts を使うとブラウザで確認できます（管理者権限が必要です）。
 
