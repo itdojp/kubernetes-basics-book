@@ -36,12 +36,12 @@
 
 ## kubectl のインストール
 kubectl は Kubernetes の minor バージョンに揃えることを推奨します。  
-インストール手順は公式Docsを参照してください。
+インストール手順は公式ドキュメントを参照してください。
 
 - https://kubernetes.io/docs/tasks/tools/
 
 ## kind のインストール
-kind のインストール手順は公式Docsを参照してください。
+kind のインストール手順は公式ドキュメントを参照してください。
 
 - https://kind.sigs.k8s.io/docs/user/quick-start/
 
@@ -120,6 +120,8 @@ kubectl -n demo port-forward svc/<service-name> 8081:80
 本節は後続章の前提となる「デプロイ→Service→疎通」の最小手順を確認します。
 
 1) Deployment を作成します（YAML の詳細は第3章で扱います）。
+
+補足: `nginx:stable` は学習用途の例です。再現性が必要な場合は、タグの固定や digest 参照を検討してください。
 
 ```bash
 kubectl apply -f - <<'YAML'
