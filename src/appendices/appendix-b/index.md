@@ -62,8 +62,10 @@ YAML
 
 ```bash
 kubectl get ns demo
+kubectl -n demo rollout status deploy/web
 kubectl -n demo get deploy,svc,pod -o wide
 kubectl -n demo get endpoints web
+# 別端末で実行するか、末尾に `&` を付けてバックグラウンドで実行
 kubectl -n demo port-forward svc/web 8081:80
 curl -fsS http://localhost:8081/ > /dev/null
 ```
