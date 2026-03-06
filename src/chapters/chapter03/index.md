@@ -124,6 +124,10 @@ kubectl -n demo get pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance
 kubectl explain deployment.spec.selector
 ```
 
+出力例（labels が `Deployment` と `Pod` に付与されていることの確認）:
+
+![labels の確認（例）](./images/ch03-kubectl-show-labels-01.png)
+
 ## よくある落とし穴
 - Selector に使う label を後から変更しようとして、Service/Deployment の紐付けが崩れる
 - `metadata.namespace` を付け忘れ、default に作ってしまう
