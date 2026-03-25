@@ -90,9 +90,11 @@ kubectl -n demo exec -it "$POD" -- sh -c 'env | grep APP_ENV || true'
 kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/password'
 ```
 
-出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` の readOnly マウントを確認）:
+出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret の readOnly マウントを確認）:
 
 ![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
+
+ここでは `APP_ENV` の値が表示され、`/etc/secret` 配下のファイルを読めることが確認ポイントです。
 
 ## よくある落とし穴
 - Secret の base64 を暗号化と誤解し、平文に近い形で配布してしまう
