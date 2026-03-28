@@ -54,8 +54,7 @@ kubectl -n demo get secret web-secret
 3) Deployment に注入します（`envFrom` と Secret の volume mount を追加します）。
 
 ```bash
-kubectl -n demo patch deploy web --type strategic \
-  -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
+kubectl -n demo patch deploy web --type strategic -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
 kubectl -n demo rollout status deploy/web
 ```
 
@@ -67,7 +66,7 @@ kubectl -n demo exec -it "$POD" -- sh -c 'env | grep APP_ENV || true'
 kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/password'
 ```
 
-出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret の readOnly マウントを確認）:
+出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret マウントを確認）:
 
 ![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
 
