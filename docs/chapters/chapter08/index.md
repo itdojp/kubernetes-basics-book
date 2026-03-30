@@ -59,7 +59,9 @@ kubectl -n demo get secret web-secret
 3) Deployment に注入します（`envFrom` と Secret の volume mount を追加します）。
 
 ```bash
-kubectl -n demo patch deploy web --type strategic -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
+kubectl -n demo patch deploy web \
+  --type strategic \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
 kubectl -n demo rollout status deploy/web
 ```
 
@@ -75,7 +77,7 @@ kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/
 
 ![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
 
-ここでは `APP_ENV` の値が表示され、`/etc/secret` 配下のファイルを読めることが確認ポイントです。
+ここでは `APP_ENV` の値が表示され、`/etc/secret` が `readOnly` で mount され、その配下のファイルを読めることが確認ポイントです。
 
 ## よくある落とし穴
 - Secret の base64 を暗号化と誤解し、平文に近い形で配布してしまう
