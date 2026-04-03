@@ -3,7 +3,7 @@
 Pod / Deployment / Service / Ingress を中心に、アプリケーションをKubernetesに載せるための基礎と実践を整理する。
 
 ## オンライン版
-- https://itdojp.github.io/kubernetes-basics-book/
+- [Kubernetes入門：PodからIngressまで（基礎と実践）](https://itdojp.github.io/kubernetes-basics-book/)
 
 ## 対象読者
 - Kubernetes をこれから学ぶソフトウェアエンジニア/インフラエンジニア
@@ -36,8 +36,8 @@ npm run dev
 ```
 
 ## フィードバック
-- Issue: https://github.com/itdojp/kubernetes-basics-book/issues
-- Email: knowledge@itdo.jp
+- Issue: [itdojp/kubernetes-basics-book の Issues](https://github.com/itdojp/kubernetes-basics-book/issues)
+- Email: [knowledge@itdo.jp](mailto:knowledge@itdo.jp)
 
 ## ライセンス
 - CC-BY-NC-SA-4.0（商用利用は別途契約が必要）
