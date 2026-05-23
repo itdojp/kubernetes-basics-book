@@ -29,6 +29,9 @@ Ingress は、HTTP(S) のルーティング（ホスト/パス）を Kubernetes 
 - Ingress は「宣言」であり、実際の L7 ルーティングを実装するのは Controller です。
 - Controller はクラスタに常駐し、Ingress の変更を監視して設定に反映します。
 
+公式ドキュメントでは、Ingress API は stable ですが凍結されており、新しい機能追加は Gateway API 側で進む方針です。
+本書では既存環境で今も広く使われる Ingress の基礎を扱いますが、新規の本番設計では利用する Controller の保守状況と Gateway API への移行方針も確認してください。
+
 ## kind への ingress-nginx 導入
 前提:
 - 第2章の kind 設定により、ホスト側 `8080/8443` が kind ノードの `80/443` にマッピングされていること

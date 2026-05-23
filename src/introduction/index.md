@@ -21,7 +21,7 @@
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
   - 必要に応じて『Podman完全ガイド』を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
-  - 別冊: [Kubernetesクラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
+  - 別冊: [Kubernetes クラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
 
 ## 前提知識・準備
 - Linux の基本操作（シェル、ファイル、ネットワークの基礎）
@@ -35,6 +35,12 @@
 - kubectl: v1.35 系
 - ローカルクラスタ: kind v0.31.0
 - Ingress Controller: ingress-nginx controller-v1.14.3
+
+2026-05-23（Asia/Tokyo）時点の公式リリース確認:
+
+- Kubernetes の最新系列は v1.36 系（最新パッチは v1.36.1）です。
+- Kubernetes プロジェクトが保守する直近 3 minor は v1.36 / v1.35 / v1.34 です。
+- 本書の v1.35 系ハンズオンはサポート対象系列内ですが、手元のクラスタや管理サービスでは API server、kubectl、kubelet の version skew policy を確認してください。
 
 補足:
 - Kubernetes / kind / ingress-nginx のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。

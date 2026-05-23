@@ -24,9 +24,9 @@ title: "はじめに"
 
 ### 扱わない範囲
 - コンテナ基礎の深掘り（名前空間/cgroups、イメージ管理の詳細等）
-  - 必要に応じて Podman 本を参照: https://itdojp.github.io/podman-book/
+  - 必要に応じて『Podman完全ガイド』を参照: [Podman完全ガイド](https://itdojp.github.io/podman-book/)
 - クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）
-  - 別冊: https://itdojp.github.io/kubernetes-cluster-ops-book/
+  - 別冊: [Kubernetes クラスタ設計・運用実践ガイド（運用編）](https://itdojp.github.io/kubernetes-cluster-ops-book/)
 
 ## 前提知識・準備
 - Linux の基本操作（シェル、ファイル、ネットワークの基礎）
@@ -36,12 +36,19 @@ title: "はじめに"
 ## 学習環境（動作確認）
 本書のコマンド例は、以下の構成で動作確認します。
 
-- Kubernetes: v1.35 系（2026-02-23 時点の stable は v1.35.1）
+- Kubernetes: v1.35 系（動作確認: v1.35.1）
 - kubectl: v1.35 系
 - ローカルクラスタ: kind v0.31.0
 - Ingress Controller: ingress-nginx controller-v1.14.3
 
+2026-05-23（Asia/Tokyo）時点の公式リリース確認:
+
+- Kubernetes の最新系列は v1.36 系（最新パッチは v1.36.1）です。
+- Kubernetes プロジェクトが保守する直近 3 minor は v1.36 / v1.35 / v1.34 です。
+- 本書の v1.35 系ハンズオンはサポート対象系列内ですが、手元のクラスタや管理サービスでは API server、kubectl、kubelet の version skew policy を確認してください。
+
 補足:
+- Kubernetes / kind / ingress-nginx のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。
 - kind 以外（minikube など）でも実行できますが、Storage/Ingress など一部の章では差分が出ます。
 - 本書の YAML は可能な限り基本 API に寄せ、特定ベンダ固有の拡張は扱いません。
 
@@ -65,7 +72,7 @@ title: "はじめに"
   - `app.kubernetes.io/instance: demo`
 
 ## 読み方ガイド
-- 初学者は、第1章→第2章→第3章→第4章→第5章→第6章→第7章の順に進めてください。
+- コンテナに不慣れな場合は、第0章→第1章→第2章→第3章→第4章→第5章→第6章→第7章の順に進めてください（既にコンテナを扱える場合は第0章はスキップ可）。
 - 既に kubectl を扱える場合は、第3章（metadata 設計）から読み始めても問題ありません。
 - まず動かすことを優先する場合は、第2章→第5章→第6章→第7章を先行し、必要に応じて概念章へ戻ってください。
 
@@ -77,7 +84,7 @@ kubectl config current-context
 ```
 
 ## フィードバック
-- Issue: https://github.com/itdojp/kubernetes-basics-book/issues
+- Issue: [GitHub Issues](https://github.com/itdojp/kubernetes-basics-book/issues)
 - Email: knowledge@itdo.jp
 
 ## 次に読む
