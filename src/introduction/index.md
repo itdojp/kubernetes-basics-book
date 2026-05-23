@@ -36,6 +36,12 @@
 - ローカルクラスタ: kind v0.31.0
 - Ingress Controller: ingress-nginx controller-v1.14.3
 
+2026-05-23（Asia/Tokyo）時点の公式リリース確認:
+
+- Kubernetes の最新系列は v1.36 系（最新パッチは v1.36.1）です。
+- Kubernetes プロジェクトが保守する直近 3 minor は v1.36 / v1.35 / v1.34 です。
+- 本書の v1.35 系ハンズオンはサポート対象系列内ですが、手元のクラスタや管理サービスでは API server、kubectl、kubelet の version skew policy を確認してください。
+
 補足:
 - Kubernetes / kind / ingress-nginx のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。
 - kind 以外（minikube など）でも実行できますが、Storage/Ingress など一部の章では差分が出ます。

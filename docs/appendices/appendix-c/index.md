@@ -9,8 +9,12 @@ title: "付録C：参考リンク集"
 
 ## Kubernetes 公式ドキュメント
 - 概要（Concepts）: https://kubernetes.io/docs/concepts/
+- リリース情報: https://kubernetes.io/releases/
+- Version skew policy: https://kubernetes.io/releases/version-skew-policy/
 - ワークロード（Workloads）: https://kubernetes.io/docs/concepts/workloads/
 - サービス/ネットワーク: https://kubernetes.io/docs/concepts/services-networking/
+- Pod Security Admission: https://kubernetes.io/docs/concepts/security/pod-security-admission/
+- Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - kubectl リファレンス: https://kubernetes.io/docs/reference/kubectl/
 - API リファレンス: https://kubernetes.io/docs/reference/
 
@@ -26,5 +30,5 @@ title: "付録C：参考リンク集"
 - kubectx / kubens（context/namespace 切替）: https://github.com/ahmetb/kubectx
 
 ## 次に読む
-- Kubernetesクラスタ設計・運用実践ガイド（運用編）: https://itdojp.github.io/kubernetes-cluster-ops-book/
+- Kubernetes クラスタ設計・運用実践ガイド（運用編）: https://itdojp.github.io/kubernetes-cluster-ops-book/
 - Podman完全ガイド（コンテナ基礎）: https://itdojp.github.io/podman-book/

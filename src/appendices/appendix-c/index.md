@@ -4,8 +4,12 @@
 
 ## Kubernetes 公式ドキュメント
 - 概要（Concepts）: https://kubernetes.io/docs/concepts/
+- リリース情報: https://kubernetes.io/releases/
+- Version skew policy: https://kubernetes.io/releases/version-skew-policy/
 - ワークロード（Workloads）: https://kubernetes.io/docs/concepts/workloads/
 - サービス/ネットワーク: https://kubernetes.io/docs/concepts/services-networking/
+- Pod Security Admission: https://kubernetes.io/docs/concepts/security/pod-security-admission/
+- Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
 - kubectl リファレンス: https://kubernetes.io/docs/reference/kubectl/
 - API リファレンス: https://kubernetes.io/docs/reference/
 

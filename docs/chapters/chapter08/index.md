@@ -33,6 +33,7 @@ Kubernetes では ConfigMap/Secret を使い、設定を外部化して注入し
 - 秘密情報を扱います（パスワード、トークン等）。
 - `data` は base64 で格納されますが、暗号化ではありません。
 - Git にコミットする運用は原則避けます（少なくとも平文で管理しません）。
+- 本番では、Secret の暗号化 at rest、外部シークレット管理、監査ログ、読み取り権限（RBAC）を運用編の論点として分離して確認します。
 
 ## 注入パターン
 - env: 個別キーを環境変数へ注入
@@ -61,7 +62,20 @@ kubectl -n demo get secret web-secret
 ```bash
 kubectl -n demo patch deploy web \
   --type strategic \
-  -p '{"spec":{"template":{"spec":{"containers":[{"name":"web","envFrom":[{"configMapRef":{"name":"web-config"}}],"volumeMounts":[{"name":"secret","mountPath":"/etc/secret","readOnly":true}]}],"volumes":[{"name":"secret","secret":{"secretName":"web-secret"}}]}}}}'
+  -p '{
+    "spec": {
+      "template": {
+        "spec": {
+          "containers": [{
+            "name": "web",
+            "envFrom": [{"configMapRef": {"name": "web-config"}}],
+            "volumeMounts": [{"name": "secret", "mountPath": "/etc/secret", "readOnly": true}]
+          }],
+          "volumes": [{"name": "secret", "secret": {"secretName": "web-secret"}}]
+        }
+      }
+    }
+  }'
 kubectl -n demo rollout status deploy/web
 ```
 
@@ -70,14 +84,15 @@ kubectl -n demo rollout status deploy/web
 ```bash
 POD=$(kubectl -n demo get pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance=demo -o name | head -n 1)
 kubectl -n demo exec -it "$POD" -- sh -c 'env | grep APP_ENV || true'
-kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && cat /etc/secret/password'
+kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && test -s /etc/secret/password && echo "secret file exists"'
 ```
 
 出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret マウントを確認）:
 
 ![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
 
-ここでは `APP_ENV` の値が表示され、`/etc/secret` が `readOnly` で mount され、その配下のファイルを読めることが確認ポイントです。
+ここでは `APP_ENV` の値が表示され、`/etc/secret` が `readOnly` で mount され、その配下に Secret 由来のファイルが存在することが確認ポイントです。
+ハンズオンでも秘密値を画面やログに表示しない癖を付けます。
 
 ## よくある落とし穴
 - Secret の base64 を暗号化と誤解し、平文に近い形で配布してしまう
