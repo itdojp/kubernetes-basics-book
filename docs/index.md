@@ -29,6 +29,19 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 - [ ] Secret は base64 であって暗号化ではない前提で扱い、Git へ平文相当の値を残さない
 - [ ] Ingress は Controller が必須であり、Ingress API が凍結されていることと Gateway API の位置づけを確認した
 
+## 実務参照の入口
+
+本書を読み進めるときは、章を順番に読むだけでなく、次の導線を使って「確認すること」と「切り分けること」を分けてください。
+
+| 目的 | 参照先 | 使い方 |
+| --- | --- | --- |
+| 作業前に前提をそろえる | [付録D：実務チェックリストとトラブルシュート導線](appendices/appendix-d/) | クラスタ、namespace、権限、マニフェスト、戻し方を確認してから作業する |
+| よく使う kubectl を確認する | [付録A：kubectlクイックリファレンス](appendices/appendix-a/) | `get` / `describe` / `logs` / `events` の入口を素早く引く |
+| YAML の最小形を確認する | [付録B：マニフェストスニペット集](appendices/appendix-b/) | Pod / Deployment / Service / Ingress の雛形を目的別に参照する |
+| 障害切り分けの順序を確認する | [第10章：基本トラブルシューティング](chapters/chapter10/) | 症状、変更点、events、logs、Service 到達性の順に確認する |
+
+実務で利用する場合は、付録Dのチェックリストを作業メモまたは Issue に貼り、未確認事項を残したまま適用しない運用にします。
+
 ## 目次
 - [はじめに](introduction/)
 

@@ -9,6 +9,13 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションをK
 - Kubernetes をこれから学ぶソフトウェアエンジニア/インフラエンジニア
 - 代表的なリソース（Pod/Deployment/Service/Ingress）を扱う必要がある方
 
+## 実務参照の入口
+
+公開版では、トップページからチェックリスト / トラブルシュート導線へ進める入口を用意しています。
+
+- [実務チェックリストとトラブルシュート導線](https://itdojp.github.io/kubernetes-basics-book/appendices/appendix-d/)
+- [基本トラブルシューティング](https://itdojp.github.io/kubernetes-basics-book/chapters/chapter10/)
+
 ## 開発（ローカル）
 
 ### 前提
