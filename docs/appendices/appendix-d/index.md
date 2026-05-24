@@ -42,17 +42,17 @@ title: "付録D：実務チェックリストとトラブルシュート導線"
 
 ```bash
 kubectl config current-context
-kubectl -n <namespace> get all
-kubectl -n <namespace> get events --sort-by=.lastTimestamp
-kubectl -n <namespace> describe pod <pod-name>
-kubectl -n <namespace> logs <pod-name>
-kubectl -n <namespace> get svc,endpointslice,ingress
+kubectl -n <ns> get all
+kubectl -n <ns> get events --sort-by=.lastTimestamp
+kubectl -n <ns> describe pod <pod>
+kubectl -n <ns> logs <pod>
+kubectl -n <ns> get svc,endpointslice,ingress
 ```
 
 `events` の時刻順が期待どおりでない場合は、次のように creationTimestamp で並べ替えます。
 
 ```bash
-kubectl -n <namespace> get events --sort-by=.metadata.creationTimestamp
+kubectl -n <ns> get events --sort-by=.metadata.creationTimestamp
 ```
 
 ## 記録と次アクション
