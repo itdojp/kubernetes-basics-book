@@ -19,12 +19,12 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションをK
 ## 開発（ローカル）
 
 ### 前提
-- Node.js（動作確認: v22）
+- Node.js 20+（CI は Node.js 20 を使用）
 - npm
 
 ### セットアップ
 ```bash
-npm install
+npm ci
 ```
 
 ### src → docs 同期
@@ -35,6 +35,15 @@ npm run sync
 ### ビルド
 ```bash
 npm run build
+```
+
+### 品質チェック
+```bash
+# npm 依存関係のセキュリティ監査
+npm run check:security
+
+# src → docs 同期と dist 生成の確認
+npm test
 ```
 
 ### ローカルプレビュー
