@@ -42,7 +42,10 @@ npm run build
 # npm 依存関係のセキュリティ監査
 npm run check:security
 
-# src → docs 同期と dist 生成の確認
+# src → docs 同期後に未コミット差分が出ないことを確認
+npm run check:docs-sync
+
+# docs 同期差分の確認と dist 生成
 npm test
 ```
 
