@@ -7,6 +7,9 @@
   "scripts": {
     "sync": "node scripts/sync-src-to-docs.js",
     "build": "npm run sync && node scripts/node-build.js",
+    "check:docs-sync": "npm run sync && git diff --exit-code -- docs",
+    "test": "npm run check:docs-sync && node scripts/node-build.js",
+    "check:security": "npm audit",
     "serve": "cd dist && python3 -m http.server 4000 || python -m http.server 4000",
     "dev": "npm run build && npm run serve"
   },
