@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { isDeepStrictEqual } = require('util');
 
 const ROOT = process.cwd();
 
@@ -78,7 +79,7 @@ function collectSourceAssets(relativeDirectory) {
     const relativePath = path.posix.join(relativeDirectory, entry.name);
     if (entry.isDirectory()) {
       assets.push(...collectSourceAssets(relativePath));
-    } else if (path.extname(entry.name).toLowerCase() !== '.md') {
+    } else if (entry.isFile() && path.extname(entry.name).toLowerCase() !== '.md') {
       assets.push(relativePath);
     }
   }
@@ -104,6 +105,13 @@ function checkAsset(sourcePath) {
 
 function main() {
   const config = JSON.parse(readText('book-config.json'));
+  const formatterConfig = JSON.parse(readText('book-formatter-config.json'));
+  if (!isDeepStrictEqual(formatterConfig.ux, config.ux)) {
+    fail('book-formatter-config.json ux differs from book-config.json');
+  }
+  if (!isDeepStrictEqual(formatterConfig.structure, config.structure)) {
+    fail('book-formatter-config.json structure differs from book-config.json');
+  }
   const entries = configuredEntries(config);
   for (const entry of entries) checkPage(entry);
 

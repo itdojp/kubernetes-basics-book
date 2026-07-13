@@ -57,7 +57,7 @@ function collectFiles(relativeDirectory) {
     const relativePath = path.posix.join(relativeDirectory, entry.name);
     if (entry.isDirectory()) {
       files.push(...collectFiles(relativePath));
-    } else {
+    } else if (entry.isFile()) {
       files.push(relativePath);
     }
   }

@@ -18,7 +18,7 @@
       "checklistPack": true,
       "troubleshootingFlow": true,
       "conceptMap": false,
-      "figureIndex": false,
+      "figureIndex": true,
       "legalNotice": false,
       "glossary": false
     }
@@ -169,13 +169,31 @@
         "srcPath": "src/appendices/appendix-c/index.md",
         "docsPath": "docs/appendices/appendix-c/index.md",
         "navPath": "/appendices/appendix-c/"
+      },
+      {
+        "id": "appendix-d",
+        "title": "付録D：実務チェックリストとトラブルシュート導線",
+        "description": "実務適用前チェックと障害切り分けの入口",
+        "order": 16,
+        "srcPath": "src/appendices/appendix-d/index.md",
+        "docsPath": "docs/appendices/appendix-d/index.md",
+        "navPath": "/appendices/appendix-d/"
+      },
+      {
+        "id": "appendix-e",
+        "title": "付録E：図版索引",
+        "description": "既存 PNG 図版の章別索引と確認観点",
+        "order": 17,
+        "srcPath": "src/appendices/appendix-e/index.md",
+        "docsPath": "docs/appendices/appendix-e/index.md",
+        "navPath": "/appendices/appendix-e/"
       }
     ],
     "afterword": {
       "id": "afterword",
       "title": "あとがき",
       "description": "まとめ・次に読む本（運用編への導線）",
-      "order": 16,
+      "order": 18,
       "srcPath": "src/afterword/index.md",
       "docsPath": "docs/afterword/index.md",
       "navPath": "/afterword/"
