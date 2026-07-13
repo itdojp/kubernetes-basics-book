@@ -137,6 +137,7 @@ kubectl -n demo describe pod -l app.kubernetes.io/name=web,app.kubernetes.io/ins
 
 出力例（Probe / Resources / Conditions / Events の確認）:
 
+<a id="figure-ch04-kubectl-describe-pod-01"></a>
 ![kubectl describe pod（例）](./images/ch04-kubectl-describe-pod-01.png)
 
 ## よくある落とし穴

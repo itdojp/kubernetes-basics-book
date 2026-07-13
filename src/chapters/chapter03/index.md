@@ -126,6 +126,7 @@ kubectl explain deployment.spec.selector
 
 出力例（labels が `Deployment` と `Pod` に付与されていることの確認）:
 
+<a id="figure-ch03-kubectl-show-labels-01"></a>
 ![labels の確認（例）](./images/ch03-kubectl-show-labels-01.png)
 
 ## よくある落とし穴

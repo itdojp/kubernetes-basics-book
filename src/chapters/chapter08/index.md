@@ -84,6 +84,7 @@ kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && test -s /etc/sec
 
 出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret マウントを確認）:
 
+<a id="figure-ch08-configmap-secret-01"></a>
 ![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
 
 ここでは `APP_ENV` の値が表示され、`/etc/secret` が `readOnly` で mount され、その配下に Secret 由来のファイルが存在することが確認ポイントです。

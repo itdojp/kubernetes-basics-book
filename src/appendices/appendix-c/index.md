@@ -27,3 +27,7 @@
 ## 次に読む
 - Kubernetes クラスタ設計・運用実践ガイド（運用編）: https://itdojp.github.io/kubernetes-cluster-ops-book/
 - Podman完全ガイド（コンテナ基礎）: https://itdojp.github.io/podman-book/
+
+## 関連ページ
+- [付録D：実務チェックリストとトラブルシュート導線](../appendix-d/)
+- [付録E：図版索引](../appendix-e/)

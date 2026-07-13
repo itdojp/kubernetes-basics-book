@@ -103,6 +103,7 @@ kubectl get ns demo
 
 出力例（`kind.yaml` の確認〜クラスタ作成〜Namespace 作成）:
 
+<a id="figure-ch02-kind-bootstrap-01"></a>
 ![kind クラスタの作成と確認（例）](./images/ch02-kind-bootstrap-01.png)
 
 ## kubectl 基本操作（最小セット）

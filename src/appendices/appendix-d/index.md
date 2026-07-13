@@ -64,3 +64,4 @@ kubectl -n <ns> get events --sort-by=.metadata.creationTimestamp
 - [第10章：基本トラブルシューティング](../../chapters/chapter10/)
 - [付録A：kubectlクイックリファレンス](../appendix-a/)
 - [付録B：マニフェストスニペット集](../appendix-b/)
+- [付録E：図版索引](../appendix-e/)

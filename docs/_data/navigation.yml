@@ -35,6 +35,8 @@ appendices:
     path: "/appendices/appendix-c/"
   - title: "付録D：実務チェックリストとトラブルシュート導線"
     path: "/appendices/appendix-d/"
+  - title: "付録E：図版索引"
+    path: "/appendices/appendix-e/"
 
 afterword:
   - title: "あとがき"

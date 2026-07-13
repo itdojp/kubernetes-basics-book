@@ -74,6 +74,7 @@ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web
 
 出力例（selector 不整合→EndpointSlice の `ENDPOINTS` 列が 0、または addresses が空→原因確認→復旧。`describe svc` の Selector で原因を追う）:
 
+<a id="figure-ch10-service-selector-debug-01"></a>
 ![Service の selector 不整合の切り分け（例）](./images/ch10-service-selector-debug-01.png)
 
 ここでは selector 不整合で EndpointSlice の `ENDPOINTS` 列が 0、または addresses が空になり、`describe svc` の Selector から原因を特定できることが確認ポイントです。

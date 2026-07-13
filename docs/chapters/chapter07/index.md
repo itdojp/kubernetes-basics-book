@@ -106,6 +106,7 @@ curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 
 出力例（ingress-nginx 導入〜Ingress 作成〜疎通確認）:
 
+<a id="figure-ch07-ingress-nginx-01"></a>
 ![ingress-nginx の導入と Host ルーティング（例）](./images/ch07-ingress-nginx-01.png)
 
 ### （任意）ブラウザで確認する
