@@ -20,18 +20,18 @@ const CHAPTER_TITLES = {
   chapter10: '第10章：基本トラブルシューティング',
 };
 const FIGURES = [
-  { chapter: 'chapter00', chapterNumber: '0', filename: 'ch00-podman-version-01.png', anchor: 'figure-ch00-podman-version-01', title: 'podman version（例）' },
-  { chapter: 'chapter00', chapterNumber: '0', filename: 'ch00-nginx-http-02.png', anchor: 'figure-ch00-nginx-http-02', title: 'Nginx の起動と疎通確認（例）' },
-  { chapter: 'chapter01', chapterNumber: '1', filename: 'ch01-kubectl-explore-01.png', anchor: 'figure-ch01-kubectl-explore-01', title: 'kubectl で API を探索する（例）' },
-  { chapter: 'chapter02', chapterNumber: '2', filename: 'ch02-kind-bootstrap-01.png', anchor: 'figure-ch02-kind-bootstrap-01', title: 'kind クラスタの作成と確認（例）' },
-  { chapter: 'chapter03', chapterNumber: '3', filename: 'ch03-kubectl-show-labels-01.png', anchor: 'figure-ch03-kubectl-show-labels-01', title: 'labels の確認（例）' },
-  { chapter: 'chapter04', chapterNumber: '4', filename: 'ch04-kubectl-describe-pod-01.png', anchor: 'figure-ch04-kubectl-describe-pod-01', title: 'kubectl describe pod（例）' },
-  { chapter: 'chapter05', chapterNumber: '5', filename: 'ch05-rollout-rs-01.png', anchor: 'figure-ch05-rollout-rs-01', title: 'ロールアウトと ReplicaSet の切り替え（例）' },
-  { chapter: 'chapter06', chapterNumber: '6', filename: 'ch06-service-dns-01.png', anchor: 'figure-ch06-service-dns-01', title: 'Service と DNS の確認（例）' },
-  { chapter: 'chapter07', chapterNumber: '7', filename: 'ch07-ingress-nginx-01.png', anchor: 'figure-ch07-ingress-nginx-01', title: 'ingress-nginx の導入と Host ルーティング（例）' },
-  { chapter: 'chapter08', chapterNumber: '8', filename: 'ch08-configmap-secret-01.png', anchor: 'figure-ch08-configmap-secret-01', title: 'ConfigMap/Secret の注入（例）' },
-  { chapter: 'chapter09', chapterNumber: '9', filename: 'ch09-pvc-mount-01.png', anchor: 'figure-ch09-pvc-mount-01', title: 'PVC の作成とマウント（例）' },
-  { chapter: 'chapter10', chapterNumber: '10', filename: 'ch10-service-selector-debug-01.png', anchor: 'figure-ch10-service-selector-debug-01', title: 'Service の selector 不整合の切り分け（例）' },
+  { chapter: 'chapter00', filename: 'ch00-podman-version-01.png', anchor: 'figure-ch00-podman-version-01', title: 'podman version（例）' },
+  { chapter: 'chapter00', filename: 'ch00-nginx-http-02.png', anchor: 'figure-ch00-nginx-http-02', title: 'Nginx の起動と疎通確認（例）' },
+  { chapter: 'chapter01', filename: 'ch01-kubectl-explore-01.png', anchor: 'figure-ch01-kubectl-explore-01', title: 'kubectl で API を探索する（例）' },
+  { chapter: 'chapter02', filename: 'ch02-kind-bootstrap-01.png', anchor: 'figure-ch02-kind-bootstrap-01', title: 'kind クラスタの作成と確認（例）' },
+  { chapter: 'chapter03', filename: 'ch03-kubectl-show-labels-01.png', anchor: 'figure-ch03-kubectl-show-labels-01', title: 'labels の確認（例）' },
+  { chapter: 'chapter04', filename: 'ch04-kubectl-describe-pod-01.png', anchor: 'figure-ch04-kubectl-describe-pod-01', title: 'kubectl describe pod（例）' },
+  { chapter: 'chapter05', filename: 'ch05-rollout-rs-01.png', anchor: 'figure-ch05-rollout-rs-01', title: 'ロールアウトと ReplicaSet の切り替え（例）' },
+  { chapter: 'chapter06', filename: 'ch06-service-dns-01.png', anchor: 'figure-ch06-service-dns-01', title: 'Service と DNS の確認（例）' },
+  { chapter: 'chapter07', filename: 'ch07-ingress-nginx-01.png', anchor: 'figure-ch07-ingress-nginx-01', title: 'ingress-nginx の導入と Host ルーティング（例）' },
+  { chapter: 'chapter08', filename: 'ch08-configmap-secret-01.png', anchor: 'figure-ch08-configmap-secret-01', title: 'ConfigMap/Secret の注入（例）' },
+  { chapter: 'chapter09', filename: 'ch09-pvc-mount-01.png', anchor: 'figure-ch09-pvc-mount-01', title: 'PVC の作成とマウント（例）' },
+  { chapter: 'chapter10', filename: 'ch10-service-selector-debug-01.png', anchor: 'figure-ch10-service-selector-debug-01', title: 'Service の selector 不整合の切り分け（例）' },
 ];
 
 function fail(message) {
