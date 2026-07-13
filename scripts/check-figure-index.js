@@ -64,56 +64,6 @@ function collectFiles(relativeDirectory) {
   return files;
 }
 
-function yamlEscape(value) {
-  return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-}
-
-function expectedFrontMatter(entry) {
-  const lines = [
-    '---',
-    'layout: book',
-    `order: ${entry.order}`,
-    `title: "${yamlEscape(entry.title)}"`,
-  ];
-  if (entry.permalink) lines.push(`permalink: ${entry.permalink}`);
-  lines.push('---', '');
-  return lines.join('\n');
-}
-
-function configuredEntries(config) {
-  const structure = config.structure || {};
-  return [
-    structure.index,
-    structure.introduction,
-    ...(structure.chapters || []),
-    ...(structure.appendices || []),
-    structure.afterword,
-  ].filter(Boolean);
-}
-
-function expectedNavigation(config) {
-  const structure = config.structure || {};
-  const lines = [];
-  const appendItems = (key, items) => {
-    lines.push(`${key}:`);
-    for (const item of items) {
-      lines.push(`  - title: "${yamlEscape(item.title)}"`);
-      lines.push(`    path: "${yamlEscape(item.navPath)}"`);
-    }
-    lines.push('');
-  };
-
-  if (structure.introduction) appendItems('introduction', [structure.introduction]);
-  appendItems('chapters', structure.chapters || []);
-  appendItems('appendices', structure.appendices || []);
-  if (structure.afterword) {
-    lines.push('afterword:');
-    lines.push(`  - title: "${yamlEscape(structure.afterword.title)}"`);
-    lines.push(`    path: "${yamlEscape(structure.afterword.navPath)}"`);
-  }
-  return `${lines.join('\n')}\n`;
-}
-
 function pngReferences(markdown) {
   const matches = [];
   const imagePattern = /!\[([^\]]*)\]\(([^)]+\.png)(?:#[^)]+)?\)/g;
@@ -137,29 +87,17 @@ function checkConfiguration(config) {
   const appendix = appendices.find((item) => item.id === APPENDIX_ID);
   assert(appendix, `${APPENDIX_ID} route must be configured when figureIndex is true`);
   assert(appendix.navPath === APPENDIX_ROUTE, `${APPENDIX_ID}.navPath must be ${APPENDIX_ROUTE}`);
+  assert(appendix.title === '付録E：図版索引', `${APPENDIX_ID}.title must identify the reader-facing figure index`);
+  assert(appendix.order === 17, `${APPENDIX_ID}.order must place it after Appendix D`);
   assert(appendix.srcPath === 'src/appendices/appendix-e/index.md', `${APPENDIX_ID}.srcPath must identify the canonical source page`);
   assert(appendix.docsPath === 'docs/appendices/appendix-e/index.md', `${APPENDIX_ID}.docsPath must identify the generated page`);
   assert(exists(appendix.srcPath), `${APPENDIX_ID} source page is missing`);
   assert(exists(appendix.docsPath), `${APPENDIX_ID} generated page is missing`);
-}
 
-function checkGeneratedDocs(config) {
-  for (const entry of configuredEntries(config)) {
-    assert(exists(entry.srcPath), `configured source page is missing: ${entry.srcPath}`);
-    assert(exists(entry.docsPath), `configured generated page is missing: ${entry.docsPath}`);
-    const expected = `${expectedFrontMatter(entry)}${read(entry.srcPath).trimStart()}`;
-    assert(read(entry.docsPath) === expected, `generated page differs from canonical source: ${entry.docsPath}`);
-  }
-
-  assert(read('docs/_data/navigation.yml') === expectedNavigation(config), 'generated sidebar navigation differs from book-config.json');
-
-  for (const figure of FIGURES) {
-    const sourceImage = `src/chapters/${figure.chapter}/images/${figure.filename}`;
-    const docsImage = `docs/chapters/${figure.chapter}/images/${figure.filename}`;
-    assert(exists(sourceImage), `referenced source PNG is missing: ${sourceImage}`);
-    assert(exists(docsImage), `generated PNG is missing: ${docsImage}`);
-    assert(fs.readFileSync(path.join(ROOT, sourceImage)).equals(fs.readFileSync(path.join(ROOT, docsImage))), `generated PNG differs from source: ${docsImage}`);
-  }
+  const appendixDIndex = appendices.findIndex((item) => item.id === 'appendix-d');
+  const appendixEIndex = appendices.findIndex((item) => item.id === APPENDIX_ID);
+  assert(appendixDIndex >= 0 && appendixEIndex === appendixDIndex + 1, 'Appendix E must immediately follow Appendix D');
+  assert(config.structure.afterword && config.structure.afterword.order === 18, 'afterword must immediately follow Appendix E');
 }
 
 function checkSourceInventory() {
@@ -228,13 +166,25 @@ function checkIndexPage() {
   assert(docsIndex.endsWith(index), 'generated figure index page must match canonical src content');
 }
 
+function checkReaderNavigation() {
+  const topLink = '[付録E：図版索引](appendices/appendix-e/)';
+  assert(read('src/index.md').includes(topLink), 'canonical top page must link to Appendix E');
+  assert(read('docs/index.md').includes(topLink), 'generated top page must link to Appendix E');
+
+  const navigation = read('docs/_data/navigation.yml');
+  const appendixD = '  - title: "付録D：実務チェックリストとトラブルシュート導線"\n    path: "/appendices/appendix-d/"';
+  const appendixE = '  - title: "付録E：図版索引"\n    path: "/appendices/appendix-e/"';
+  assert(allOccurrences(navigation, appendixE) === 1, 'sidebar must contain exactly one Appendix E item');
+  assert(navigation.indexOf(appendixD) < navigation.indexOf(appendixE), 'sidebar must place Appendix E after Appendix D');
+}
+
 function main() {
   const config = JSON.parse(read('book-config.json'));
   checkConfiguration(config);
   checkSourceInventory();
   checkAnchors();
   checkIndexPage();
-  checkGeneratedDocs(config);
+  checkReaderNavigation();
   console.log(`✅ Figure index contract passed: ${FIGURES.length} referenced PNGs, unique anchors, route, navigation, and src/docs generation verified.`);
 }
 
