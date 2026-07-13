@@ -1,6 +1,6 @@
 ---
 layout: book
-order: 17
+order: 18
 title: "あとがき"
 ---
 # あとがき

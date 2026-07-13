@@ -32,6 +32,7 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 | 作業前に前提をそろえる | [付録D：実務チェックリストとトラブルシュート導線](appendices/appendix-d/) | クラスタ、namespace、権限、マニフェスト、戻し方を確認してから作業する |
 | よく使う kubectl を確認する | [付録A：kubectlクイックリファレンス](appendices/appendix-a/) | `get` / `describe` / `logs` / `events` の入口を素早く引く |
 | YAML の最小形を確認する | [付録B：マニフェストスニペット集](appendices/appendix-b/) | Pod / Deployment / Service / Ingress の雛形を目的別に参照する |
+| 図版の確認箇所を探す | [付録E：図版索引](appendices/appendix-e/) | 章別の目的と確認観点から、該当する既存のコマンド出力図へ直接移動する |
 | 障害切り分けの順序を確認する | [第10章：基本トラブルシューティング](chapters/chapter10/) | 症状、変更点、events、logs、Service 到達性の順に確認する |
 
 実務で利用する場合は、付録Dのチェックリストを作業メモまたは Issue に貼り、未確認事項を残したまま適用しない運用にします。
@@ -58,6 +59,8 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 - [付録A：kubectlクイックリファレンス](appendices/appendix-a/)
 - [付録B：マニフェストスニペット集](appendices/appendix-b/)
 - [付録C：参考リンク集](appendices/appendix-c/)
+- [付録D：実務チェックリストとトラブルシュート導線](appendices/appendix-d/)
+- [付録E：図版索引](appendices/appendix-e/)
 
 ## あとがき
 - [あとがき](afterword/)

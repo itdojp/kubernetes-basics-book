@@ -58,6 +58,7 @@ exit
 
 出力例（EndpointSlice / 名前解決 / Service 到達性）:
 
+<a id="figure-ch06-service-dns-01"></a>
 ![Service と DNS の確認（例）](./images/ch06-service-dns-01.png)
 
 ## よくある落とし穴

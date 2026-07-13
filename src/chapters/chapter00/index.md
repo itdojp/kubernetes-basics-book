@@ -64,10 +64,12 @@ Kubernetes はコンテナを直接実行するのではなく、ノード上の
 
 Podman のバージョン確認:
 
+<a id="figure-ch00-podman-version-01"></a>
 ![podman version（例）](./images/ch00-podman-version-01.png)
 
 Nginx を起動し、HTTP 応答とログを確認する（例）:
 
+<a id="figure-ch00-nginx-http-02"></a>
 ![Nginx の起動と疎通確認（例）](./images/ch00-nginx-http-02.png)
 
 ## よくある落とし穴

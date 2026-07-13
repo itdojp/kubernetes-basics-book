@@ -69,6 +69,7 @@ kubectl explain deployment.spec.template.spec.containers
 
 出力例（`kubectl api-resources` / `kubectl explain`）:
 
+<a id="figure-ch01-kubectl-explore-01"></a>
 ![kubectl で API を探索する（例）](./images/ch01-kubectl-explore-01.png)
 
 ## よくある落とし穴
