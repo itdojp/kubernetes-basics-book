@@ -28,7 +28,7 @@ const FIGURES = [
   { chapter: 'chapter04', filename: 'ch04-kubectl-describe-pod-01.png', anchor: 'figure-ch04-kubectl-describe-pod-01', title: 'kubectl describe pod（例）' },
   { chapter: 'chapter05', filename: 'ch05-rollout-rs-01.png', anchor: 'figure-ch05-rollout-rs-01', title: 'ロールアウトと ReplicaSet の切り替え（例）' },
   { chapter: 'chapter06', filename: 'ch06-service-dns-01.png', anchor: 'figure-ch06-service-dns-01', title: 'Service と DNS の確認（例）' },
-  { chapter: 'chapter07', filename: 'ch07-ingress-nginx-01.png', anchor: 'figure-ch07-ingress-nginx-01', title: 'ingress-nginx の導入と Host ルーティング（例）' },
+  { chapter: 'chapter07', filename: 'ch07-ingress-nginx-01.png', anchor: 'figure-ch07-ingress-nginx-01', title: 'ingress-nginx の導入と Host ルーティング（歴史的な学習例）' },
   { chapter: 'chapter08', filename: 'ch08-configmap-secret-01.png', anchor: 'figure-ch08-configmap-secret-01', title: 'ConfigMap/Secret の注入（例）' },
   { chapter: 'chapter09', filename: 'ch09-pvc-mount-01.png', anchor: 'figure-ch09-pvc-mount-01', title: 'PVC の作成とマウント（例）' },
   { chapter: 'chapter10', filename: 'ch10-service-selector-debug-01.png', anchor: 'figure-ch10-service-selector-debug-01', title: 'Service の selector 不整合の切り分け（例）' },

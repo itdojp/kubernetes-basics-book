@@ -85,11 +85,15 @@ title: "付録E：図版索引"
 
 ## 第7章：Ingress
 
-### 図E-09：ingress-nginx の導入と Host ルーティング（例）
+図E-09 は、ingress-nginx controller-v1.14.3 を使った**歴史的な学習用（historical lab-only）**の図版です。Ingress NGINX は Kubernetes 公式発表のとおり **2026年3月に retired** となり、以後はリリース、bugfix、**セキュリティ修正が提供されません**。この図版やハンズオンを本番構成の推奨と解釈せず、**本番利用は推奨しません**。
+
+新規の学習・本番設計では [Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) を現行経路の出発点とし、選定する保守中の implementation について、[公式 implementation 一覧](https://gateway-api.sigs.k8s.io/docs/implementations/list/) と [公式 conformance](https://gateway-api.sigs.k8s.io/docs/concepts/conformance/) で対象 bundle、profile、Route 種別、conformance report、保守状況を確認してください。本書は特定製品を推奨しません。
+
+### 図E-09：ingress-nginx の導入と Host ルーティング（歴史的な学習例）
 
 - **図版リンク**: [第7章の図版へ移動](../../chapters/chapter07/#figure-ch07-ingress-nginx-01)
 - **ファイル**: `ch07-ingress-nginx-01.png`
-- **目的**: ingress-nginx の導入から Ingress 作成、Host ルーティングの疎通確認までを示します。
+- **目的**: retired 済み ingress-nginx の歴史的 lab として、導入から Ingress 作成、Host ルーティングの疎通確認までを示します。
 - **確認の観点**: IngressClass、Controller の稼働、host/path、バックエンド Service、TLS の要否を分けて確認し、Ingress リソースだけで公開できると判断しません。
 
 ## 第8章：ConfigMapとSecret
