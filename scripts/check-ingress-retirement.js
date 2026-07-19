@@ -31,10 +31,24 @@ function read(relativePath) {
   return fs.readFileSync(path.join(ROOT, relativePath), 'utf8');
 }
 
+function collectFiles(relativeDirectory) {
+  const files = [];
+  const directory = path.join(ROOT, relativeDirectory);
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const relativePath = path.posix.join(relativeDirectory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...collectFiles(relativePath));
+    } else if (entry.isFile()) {
+      files.push(relativePath);
+    }
+  }
+  return files;
+}
+
 function main() {
-  const sourceFiles = fs.readdirSync(path.join(ROOT, 'src'), { recursive: true })
+  const sourceFiles = collectFiles('src')
     .filter((file) => file.endsWith('.md'))
-    .map((file) => path.posix.join('src', file));
+    .sort();
   const exposedFiles = sourceFiles.filter((file) => read(file).includes('ingress-nginx'));
 
   if (JSON.stringify(exposedFiles.sort()) !== JSON.stringify(TARGETS.slice().sort())) {
