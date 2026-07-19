@@ -62,6 +62,7 @@ function main() {
     'curl -fsSLo "$MANIFEST"',
     'sha256sum --check -',
     'shasum -a 256 --check',
+    'exit 1',
     'kubectl apply -f "$MANIFEST"',
   ];
   const markerPositions = failClosedMarkers.map((marker) => chapter.indexOf(marker));
