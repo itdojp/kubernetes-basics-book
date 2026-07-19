@@ -1,18 +1,18 @@
 # 第7章：Ingress
 
 Ingress は、HTTP(S) のルーティング（ホスト/パス）を Kubernetes のリソースとして宣言するための仕組みです。  
-ただし Ingress リソースだけでは動作せず、Ingress Controller（例: ingress-nginx）が必要です。
+ただし Ingress リソースだけでは動作せず、Ingress Controller（この章の例では retired 済みの ingress-nginx）が必要です。
 
 ## 学習目標
 - Ingress と Service の役割の違いを説明できる
-- kind 環境に ingress-nginx を導入し、Ingress でルーティングできる
+- kind 環境で、retired 済み ingress-nginx の歴史的 lab を再現し、Ingress でルーティングできる
 - ローカル環境で Host ベースルーティングの動作確認ができる
 
 ## 扱う範囲 / 扱わない範囲
 
 ### 扱う範囲
 - Ingress Controller の概念
-- ingress-nginx の導入（kind）
+- ingress-nginx の歴史的 lab（kind）
 - Host/Path ルーティングの最小構成
 - TLS の入口（Secret の使い方の概要）
 
@@ -27,22 +27,43 @@ Ingress は、HTTP(S) のルーティング（ホスト/パス）を Kubernetes 
 公式ドキュメントでは、Ingress API は stable ですが凍結されており、新しい機能追加は Gateway API 側で進む方針です。
 本書では既存環境で今も広く使われる Ingress の基礎を扱いますが、新規の本番設計では利用する Controller の保守状況と Gateway API への移行方針も確認してください。
 
-## kind への ingress-nginx 導入
+### ingress-nginx v1.14.3 の位置づけ
+この章の `controller-v1.14.3` は、再現性を確認するために残す**歴史的な学習用（historical lab-only）**の例です。Kubernetes 公式発表のとおり、Ingress NGINX は **2026年3月に retired** となり、その後はリリース、bugfix、**セキュリティ修正が提供されません**。既存の成果物が取得できても、**本番利用は推奨しません**。
+
+新規の学習・本番設計では [Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) を現行経路の出発点とし、選定する保守中の implementation について、[公式 implementation 一覧](https://gateway-api.sigs.k8s.io/docs/implementations/list/) と [公式 conformance](https://gateway-api.sigs.k8s.io/docs/concepts/conformance/) で対象 bundle、profile、Route 種別、conformance report、保守状況を確認してください。本書は特定製品を推奨しません。
+
+## kind への ingress-nginx 導入（歴史的ハンズオン）
 前提:
 - 第2章の kind 設定により、ホスト側 `8080/8443` が kind ノードの `80/443` にマッピングされていること
 
-1) ingress-nginx を導入します（kind provider 用マニフェスト）。
+1) 歴史的 lab として ingress-nginx を導入します（kind provider 用マニフェスト）。新規の本番環境へこの手順を適用しないでください。
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.14.3/deploy/static/provider/kind/deploy.yaml
+set -euo pipefail
+
+INGRESS_NGINX_COMMIT=451747c70c6fca688e157a8329a3dd219a234fd9
+INGRESS_NGINX_SHA256=e4198bf3fcbfecb510516fa6fab3db9cd1132d524896d866101ab6faca1fbc31
+MANIFEST=ingress-nginx-kind-v1.14.3.yaml
+
+curl -fsSLo "$MANIFEST" \
+  "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_NGINX_COMMIT}/deploy/static/provider/kind/deploy.yaml"
+if command -v sha256sum >/dev/null 2>&1; then
+  printf '%s  %s\n' "$INGRESS_NGINX_SHA256" "$MANIFEST" | sha256sum --check -
+elif command -v shasum >/dev/null 2>&1; then
+  printf '%s  %s\n' "$INGRESS_NGINX_SHA256" "$MANIFEST" | shasum -a 256 --check
+else
+  echo 'SHA-256 verifier (sha256sum or shasum) is required' >&2
+  exit 1
+fi
+kubectl apply -f "$MANIFEST"
 kubectl -n ingress-nginx get pods -w
 ```
 
 補足:
-- 本書では再現性のため ingress-nginx のマニフェストを特定バージョンに固定しています。
-- 更新する場合は ingress-nginx の公式リリース/インストールドキュメントを確認してください。
-  - https://github.com/kubernetes/ingress-nginx/releases
-  - https://kubernetes.github.io/ingress-nginx/
+- 本書では歴史的 lab の再現性のため、ingress-nginx v1.14.3 のcommit `451747c70c6fca688e157a8329a3dd219a234fd9`とマニフェストのSHA-256を固定しています。適用前にchecksum検証を成功させ、取得失敗や内容差分がある場合は適用を中止してください。
+- この版は retired 済みで、リリース、bugfix、セキュリティ修正が提供されないため、本番利用は推奨しません。
+- 現行の選定では、[Gateway API の公式 implementation 一覧](https://gateway-api.sigs.k8s.io/docs/implementations/list/) と [公式 conformance](https://gateway-api.sigs.k8s.io/docs/concepts/conformance/) を確認し、implementation の公式ドキュメント、対象 bundle/profile/Route、conformance report、保守状況を自分の要件と照合してください。
+- 退役したプロジェクトの履歴確認: [Ingress NGINX retirement（Kubernetes 公式）](https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/)
 
 補足: `get pods -w` の代替として、`rollout status` で待つこともできます。
 
@@ -99,10 +120,10 @@ kubectl -n demo describe ingress web
 curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 ```
 
-出力例（ingress-nginx 導入〜Ingress 作成〜疎通確認）:
+出力例（ingress-nginx の歴史的 lab：導入〜Ingress 作成〜疎通確認）:
 
 <a id="figure-ch07-ingress-nginx-01"></a>
-![ingress-nginx の導入と Host ルーティング（例）](./images/ch07-ingress-nginx-01.png)
+![ingress-nginx の導入と Host ルーティング（歴史的な学習例）](./images/ch07-ingress-nginx-01.png)
 
 ### （任意）ブラウザで確認する
 DNS が無い環境でも、hosts を使うとブラウザで確認できます（管理者権限が必要です）。
@@ -135,4 +156,5 @@ Windows の例（管理者権限で編集して追記）:
 - kind のポートマッピングがないため、ローカルから `localhost` で到達できない
 
 ## まとめ / 次に読む
+- 本章の ingress-nginx は historical lab-only です。新規の学習・本番設計では Gateway API と、公式 implementation/conformance 情報で保守状況を確認した implementation を検討してください。
 - 次に読む: [第8章：ConfigMapとSecret](../chapter08/)

@@ -34,7 +34,13 @@
 - Kubernetes: v1.35 系（動作確認: v1.35.1）
 - kubectl: v1.35 系
 - ローカルクラスタ: kind v0.31.0
-- Ingress Controller: ingress-nginx controller-v1.14.3
+- Ingress Controller: ingress-nginx controller-v1.14.3（retired済み・historical lab-only）
+
+> **重要：ingress-nginx v1.14.3 の位置づけ**
+>
+> この版は再現性を確認するために残す**歴史的な学習用（historical lab-only）**ハンズオンです。Kubernetes 公式発表のとおり、Ingress NGINX は **2026年3月に retired** となり、その後はリリース、bugfix、**セキュリティ修正が提供されません**。既存の成果物が取得できても、**本番利用は推奨しません**。
+>
+> 新規の学習・本番設計では [Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) を現行経路の出発点とし、選定する保守中の implementation について、[公式 implementation 一覧](https://gateway-api.sigs.k8s.io/docs/implementations/list/) と [公式 conformance](https://gateway-api.sigs.k8s.io/docs/concepts/conformance/) で対象 bundle、profile、Route 種別、conformance report、保守状況を確認してください。本書は特定製品を推奨しません。
 
 2026-05-23（Asia/Tokyo）時点の公式リリース確認:
 
@@ -43,7 +49,7 @@
 - 本書の v1.35 系ハンズオンはサポート対象系列内ですが、手元のクラスタや管理サービスでは API server、kubectl、kubelet の version skew policy を確認してください。
 
 補足:
-- Kubernetes / kind / ingress-nginx のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。
+- Kubernetes / kind のバージョンは変動します。差分がある場合は公式ドキュメントで要確認です。ingress-nginx v1.14.3 は上記の歴史的 lab 用に限定します。
 - kind 以外（minikube など）でも実行できますが、Storage/Ingress など一部の章では差分が出ます。
 - 本書の YAML は可能な限り基本 API に寄せ、特定ベンダ固有の拡張は扱いません。
 
