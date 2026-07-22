@@ -156,6 +156,27 @@ function count(text, value) {
   return text.split(value).length - 1;
 }
 
+function workflowRunsCommand(workflow, command) {
+  const lines = workflow.replace(/\r\n/g, '\n').split('\n');
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^(\s*)run:\s*(.*?)\s*$/);
+    if (!match) continue;
+    const indent = match[1].length;
+    const scalar = match[2].trim();
+    if (scalar === command || scalar === `'${command}'` || scalar === `"${command}"`) return true;
+    if (!/^[|>][-+]?\d*$/.test(scalar)) continue;
+    for (let nested = index + 1; nested < lines.length; nested += 1) {
+      const line = lines[nested];
+      if (!line.trim()) continue;
+      const nestedIndent = line.match(/^\s*/)[0].length;
+      if (nestedIndent <= indent) break;
+      const executable = line.trim();
+      if (!executable.startsWith('#') && executable === command) return true;
+    }
+  }
+  return false;
+}
+
 function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
   const errors = [];
   const sourceManifestPath = path.join(repoRoot, 'src/assets/visual-evidence/manifest.json');
@@ -176,7 +197,7 @@ function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
   if (!packageJson.scripts?.test?.includes('npm run check:visual-evidence')) errors.push('package.json test must run check:visual-evidence');
   try {
     const workflow = fs.readFileSync(path.join(repoRoot, '.github/workflows/book-qa.yml'), 'utf8');
-    if (!workflow.includes('run: npm test')) errors.push('Book QA must run the local visual-evidence contract through npm test');
+    if (!workflowRunsCommand(workflow, 'npm test')) errors.push('Book QA must run the local visual-evidence contract through npm test');
   } catch (error) {
     errors.push('.github/workflows/book-qa.yml is missing');
   }

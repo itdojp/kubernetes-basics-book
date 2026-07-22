@@ -83,7 +83,7 @@ try {
       () => { const p = path.join(fixtureRoot, 'package.json'); const v = JSON.parse(fs.readFileSync(p)); v.scripts['check:visual-evidence'] = 'true'; fs.writeFileSync(p, `${JSON.stringify(v, null, 2)}\n`); },
       () => fs.copyFileSync(path.join(repoRoot, 'package.json'), path.join(fixtureRoot, 'package.json'))],
     ['Book QA integration drift', 'Book QA must run the local visual-evidence contract through npm test',
-      () => { const p = path.join(fixtureRoot, '.github/workflows/book-qa.yml'); const v = fs.readFileSync(p, 'utf8'); fs.writeFileSync(p, v.replace('run: npm test', 'run: npm run build')); },
+      () => { const p = path.join(fixtureRoot, '.github/workflows/book-qa.yml'); const v = fs.readFileSync(p, 'utf8'); fs.writeFileSync(p, v.replace('run: npm test', '# run: npm test\n        run: npm run build')); },
       () => fs.copyFileSync(path.join(repoRoot, '.github/workflows/book-qa.yml'), path.join(fixtureRoot, '.github/workflows/book-qa.yml'))],
     ['missing manifest entry', 'manifest entry count',
       () => { const m = readManifest(); m.entries.pop(); writeManifest(m); },
@@ -144,6 +144,9 @@ try {
   const baselineWorkflow = fs.readFileSync(workflow, 'utf8');
   expectSuccess('Book QA step-name portability',
     () => fs.writeFileSync(workflow, baselineWorkflow.replace('name: Local npm QA', 'name: Run repository QA')),
+    () => fs.writeFileSync(workflow, baselineWorkflow));
+  expectSuccess('Book QA block-scalar portability',
+    () => fs.writeFileSync(workflow, baselineWorkflow.replace('run: npm test', 'run: |\n          npm test')),
     () => fs.writeFileSync(workflow, baselineWorkflow));
 
   const extraLower = path.join(fixtureRoot, 'src/chapters/chapter00/images/untracked.png');
@@ -243,7 +246,7 @@ try {
 
   const finalErrors = validateVisualEvidence(fixtureRoot);
   if (finalErrors.length) throw new Error(`Restored fixture failed:\n${finalErrors.join('\n')}`);
-  console.log(`Visual-evidence regression passed: ${passed}/${passed} negative mutations, ${skipped} unsupported-platform skips, 2/2 portability checks, 1/1 restored baseline.`);
+  console.log(`Visual-evidence regression passed: ${passed}/${passed} negative mutations, ${skipped} unsupported-platform skips, 3/3 portability checks, 1/1 restored baseline.`);
 } finally {
   fs.rmSync(fixtureRoot, { recursive: true, force: true });
 }
