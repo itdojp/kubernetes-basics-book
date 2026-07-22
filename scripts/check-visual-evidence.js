@@ -160,34 +160,48 @@ function workflowRunsCommand(workflow, command) {
   const lines = workflow.replace(/\r\n/g, '\n').split('\n');
   let stepsIndent = null;
   let stepIndent = null;
+  let step = null;
+  const exactCommand = (scalar) => [command, `'${command}'`, `"${command}"`].includes(scalar);
+  const eligible = () => step && exactCommand(step.run) && !step.conditional && !step.failureTolerant;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     if (!line.trim() || line.trimStart().startsWith('#')) continue;
     const indent = line.match(/^\s*/)[0].length;
     const steps = line.match(/^(\s*)steps:\s*$/);
     if (steps) {
+      if (eligible()) return true;
       stepsIndent = steps[1].length;
       stepIndent = null;
+      step = null;
       continue;
     }
     if (stepsIndent === null) continue;
     if (indent <= stepsIndent) {
+      if (eligible()) return true;
       stepsIndent = null;
       stepIndent = null;
+      step = null;
       continue;
     }
-    const step = line.match(/^(\s*)-\s+(.*)$/);
-    if (step && step[1].length === stepsIndent + 2) {
-      stepIndent = step[1].length;
-      const inlineRun = step[2].match(/^run:\s*(.*?)\s*$/);
-      if (inlineRun && [command, `'${command}'`, `"${command}"`].includes(inlineRun[1])) return true;
+    const item = line.match(/^(\s*)-\s+(.*)$/);
+    if (item && item[1].length === stepsIndent + 2) {
+      if (eligible()) return true;
+      stepIndent = item[1].length;
+      step = { run: null, conditional: false, failureTolerant: false };
+      const inlineRun = item[2].match(/^run:\s*(.*?)\s*$/);
+      if (inlineRun) step.run = inlineRun[1];
+      if (/^if\s*:/.test(item[2])) step.conditional = true;
+      if (/^continue-on-error\s*:/.test(item[2])) step.failureTolerant = true;
       continue;
     }
-    if (stepIndent === null || indent !== stepIndent + 2) continue;
-    const directRun = line.trim().match(/^run:\s*(.*?)\s*$/);
-    if (directRun && [command, `'${command}'`, `"${command}"`].includes(directRun[1])) return true;
+    if (!step || stepIndent === null || indent !== stepIndent + 2) continue;
+    const direct = line.trim();
+    const directRun = direct.match(/^run:\s*(.*?)\s*$/);
+    if (directRun) step.run = directRun[1];
+    if (/^if\s*:/.test(direct)) step.conditional = true;
+    if (/^continue-on-error\s*:/.test(direct)) step.failureTolerant = true;
   }
-  return false;
+  return eligible();
 }
 
 function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
