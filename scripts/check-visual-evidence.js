@@ -25,6 +25,11 @@ const MIN_WIDTH = 1200;
 const MAX_WIDTH = 1800;
 const MIN_HEIGHT = 320;
 const MAX_HEIGHT = 2600;
+const REQUIRED_PNG_TEXT_KEYS = [
+  'visual-evidence-transcript',
+  'visual-evidence-captured-at',
+  'visual-evidence-environment',
+];
 const FORBIDDEN = [
   { label: 'GitHub token', pattern: /(?:ghp_|github_pat_)[A-Za-z0-9_]+/i },
   { label: 'bearer token', pattern: /Bearer\s+[A-Za-z0-9._-]+/i },
@@ -257,6 +262,9 @@ function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
     if (dimensions.text['visual-evidence-transcript'] !== entry.displayedTranscript) errors.push(`${label}: embedded PNG transcript must match the manifest`);
     if (dimensions.text['visual-evidence-captured-at'] !== entry.capturedAt) errors.push(`${label}: embedded PNG capture date must match the manifest`);
     if (dimensions.text['visual-evidence-environment'] !== entry.environment) errors.push(`${label}: embedded PNG environment must match the manifest`);
+    for (const keyword of Object.keys(dimensions.text)) {
+      if (!REQUIRED_PNG_TEXT_KEYS.includes(keyword)) errors.push(`${label}: unrecognized PNG tEXt keyword ${keyword}`);
+    }
 
     if (!entry.alt || !entry.alt.includes('判断')) errors.push(`${label}: alt must state the reader decision point`);
     if (!entry.caption || !entry.caption.includes(entry.capturedAt || '') || !entry.caption.includes('JST') || !entry.caption.includes('判断')) {
@@ -283,7 +291,7 @@ function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
     const sensitiveText = JSON.stringify({
       alt: entry.alt, caption: entry.caption, environment: entry.environment, versions: entry.versions,
       sourceCommands: entry.sourceCommands, displayedTranscript: entry.displayedTranscript,
-      maskedFields: entry.maskedFields, setupSummary: entry.setupSummary,
+      maskedFields: entry.maskedFields, setupSummary: entry.setupSummary, pngText: dimensions.text,
     });
     for (const forbidden of FORBIDDEN) if (forbidden.pattern.test(sensitiveText)) errors.push(`${label}: ${forbidden.label} remains in published evidence`);
 

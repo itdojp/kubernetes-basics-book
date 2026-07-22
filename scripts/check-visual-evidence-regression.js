@@ -21,6 +21,16 @@ const manifestPath = path.join(fixtureRoot, 'src/assets/visual-evidence/manifest
 function readManifest() { return JSON.parse(fs.readFileSync(manifestPath, 'utf8')); }
 function writeManifest(value) { fs.writeFileSync(manifestPath, `${JSON.stringify(value, null, 2)}\n`); }
 
+function pngChunk(type, data) {
+  const typeBuffer = Buffer.from(type, 'ascii');
+  const chunk = Buffer.alloc(12 + data.length);
+  chunk.writeUInt32BE(data.length, 0);
+  typeBuffer.copy(chunk, 4);
+  data.copy(chunk, 8);
+  chunk.writeUInt32BE(crc32(Buffer.concat([typeBuffer, data])), 8 + data.length);
+  return chunk;
+}
+
 function expectFailure(name, evidence, mutate, restore) {
   try {
     mutate();
@@ -139,6 +149,23 @@ try {
   expectFailure('data after IEND', 'data remains after IEND',
     () => fs.writeFileSync(sourceImage, Buffer.concat([baselineImage, Buffer.from('trailing')])),
     () => fs.writeFileSync(sourceImage, baselineImage));
+  passed += 1;
+  expectFailure('unrecognized PNG text metadata', 'unrecognized PNG tEXt keyword',
+    () => {
+      const comment = pngChunk('tEXt', Buffer.from('Comment\0sanitized-but-untracked-metadata', 'latin1'));
+      const mutated = Buffer.concat([baselineImage.subarray(0, -12), comment, baselineImage.subarray(-12)]);
+      fs.writeFileSync(sourceImage, mutated);
+      fs.writeFileSync(docsImage, mutated);
+      const m = readManifest();
+      m.entries[0].bytes = mutated.length;
+      m.entries[0].sha256 = crypto.createHash('sha256').update(mutated).digest('hex');
+      writeManifest(m);
+    },
+    () => {
+      fs.writeFileSync(sourceImage, baselineImage);
+      fs.writeFileSync(docsImage, baselineDocsImage);
+      fs.writeFileSync(manifestPath, baselineManifest);
+    });
   passed += 1;
 
   const screenshots = path.join(fixtureRoot, 'SCREENSHOTS.md');
