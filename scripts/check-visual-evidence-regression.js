@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 const { crc32, validateVisualEvidence } = require('./check-visual-evidence');
 
 const repoRoot = path.resolve(__dirname, '..');
@@ -29,6 +30,10 @@ function pngChunk(type, data) {
   data.copy(chunk, 8);
   chunk.writeUInt32BE(crc32(Buffer.concat([typeBuffer, data])), 8 + data.length);
   return chunk;
+}
+
+function insertBeforeIend(png, chunk) {
+  return Buffer.concat([png.subarray(0, -12), chunk, png.subarray(-12)]);
 }
 
 function expectFailure(name, evidence, mutate, restore) {
@@ -153,7 +158,7 @@ try {
   expectFailure('unrecognized PNG text metadata', 'unrecognized PNG tEXt keyword',
     () => {
       const comment = pngChunk('tEXt', Buffer.from('Comment\0sanitized-but-untracked-metadata', 'latin1'));
-      const mutated = Buffer.concat([baselineImage.subarray(0, -12), comment, baselineImage.subarray(-12)]);
+      const mutated = insertBeforeIend(baselineImage, comment);
       fs.writeFileSync(sourceImage, mutated);
       fs.writeFileSync(docsImage, mutated);
       const m = readManifest();
@@ -167,6 +172,32 @@ try {
       fs.writeFileSync(manifestPath, baselineManifest);
     });
   passed += 1;
+  const metadataCases = [
+    ['iTXt', Buffer.concat([
+      Buffer.from('Comment\0', 'latin1'), Buffer.from([0, 0, 0, 0]), Buffer.from('untracked international text', 'utf8'),
+    ])],
+    ['zTXt', Buffer.concat([
+      Buffer.from('Comment\0', 'latin1'), Buffer.from([0]), zlib.deflateSync(Buffer.from('untracked compressed text', 'latin1')),
+    ])],
+  ];
+  for (const [chunkType, payload] of metadataCases) {
+    expectFailure(`unsupported ${chunkType} metadata`, `unsupported PNG chunk ${chunkType}`,
+      () => {
+        const mutated = insertBeforeIend(baselineImage, pngChunk(chunkType, payload));
+        fs.writeFileSync(sourceImage, mutated);
+        fs.writeFileSync(docsImage, mutated);
+        const m = readManifest();
+        m.entries[0].bytes = mutated.length;
+        m.entries[0].sha256 = crypto.createHash('sha256').update(mutated).digest('hex');
+        writeManifest(m);
+      },
+      () => {
+        fs.writeFileSync(sourceImage, baselineImage);
+        fs.writeFileSync(docsImage, baselineDocsImage);
+        fs.writeFileSync(manifestPath, baselineManifest);
+      });
+    passed += 1;
+  }
 
   const screenshots = path.join(fixtureRoot, 'SCREENSHOTS.md');
   const baselineScreenshots = fs.readFileSync(screenshots, 'utf8');

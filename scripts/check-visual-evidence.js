@@ -30,6 +30,7 @@ const REQUIRED_PNG_TEXT_KEYS = [
   'visual-evidence-captured-at',
   'visual-evidence-environment',
 ];
+const ALLOWED_PNG_CHUNKS = new Set(['IHDR', 'tEXt', 'IDAT', 'IEND']);
 const FORBIDDEN = [
   { label: 'GitHub token', pattern: /(?:ghp_|github_pat_)[A-Za-z0-9_]+/i },
   { label: 'bearer token', pattern: /Bearer\s+[A-Za-z0-9._-]+/i },
@@ -71,7 +72,6 @@ function decodePng(buffer) {
   let offset = 8;
   let header;
   let sawIend = false;
-  let sawPalette = false;
   const imageData = [];
   const text = {};
   while (offset < buffer.length) {
@@ -87,14 +87,13 @@ function decodePng(buffer) {
     const data = buffer.subarray(dataStart, crcStart);
     if (crc32(Buffer.concat([typeBuffer, data])) !== buffer.readUInt32BE(crcStart)) return { error: `${type} chunk CRC is invalid` };
     if (!header && type !== 'IHDR') return { error: 'IHDR is not the first chunk' };
+    if (!ALLOWED_PNG_CHUNKS.has(type)) return { error: `unsupported PNG chunk ${type}` };
     if (type === 'IHDR') {
       if (header || length !== 13) return { error: 'IHDR is duplicated or malformed' };
       header = {
         width: data.readUInt32BE(0), height: data.readUInt32BE(4), bitDepth: data[8], colorType: data[9],
         compression: data[10], filter: data[11], interlace: data[12],
       };
-    } else if (type === 'PLTE') {
-      sawPalette = true;
     } else if (type === 'tEXt') {
       const separator = data.indexOf(0);
       if (separator <= 0) return { error: 'tEXt chunk is malformed' };
@@ -117,12 +116,11 @@ function decodePng(buffer) {
   }
   const colorTypes = {
     0: { channels: 1, depths: [1, 2, 4, 8, 16] }, 2: { channels: 3, depths: [8, 16] },
-    3: { channels: 1, depths: [1, 2, 4, 8] }, 4: { channels: 2, depths: [8, 16] },
-    6: { channels: 4, depths: [8, 16] },
+    4: { channels: 2, depths: [8, 16] }, 6: { channels: 4, depths: [8, 16] },
   };
   const color = colorTypes[header.colorType];
-  if (!color || !color.depths.includes(header.bitDepth) || (header.colorType === 3 && !sawPalette)) {
-    return { error: 'invalid color type, bit depth, or palette' };
+  if (!color || !color.depths.includes(header.bitDepth)) {
+    return { error: 'invalid color type or bit depth' };
   }
   const rowBytesBig = (BigInt(header.width) * BigInt(color.channels) * BigInt(header.bitDepth) + 7n) / 8n;
   const expectedBytesBig = BigInt(header.height) * (rowBytesBig + 1n);
