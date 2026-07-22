@@ -52,7 +52,9 @@ kubectl -n demo get rs
 出力例（更新により ReplicaSet が切り替わることの確認）:
 
 <a id="figure-ch05-rollout-rs-01"></a>
-![ロールアウトと ReplicaSet の切り替え（例）](./images/ch05-rollout-rs-01.png)
+![新旧ReplicaSetの切替とrollout成功を判断する出力](./images/ch05-rollout-rs-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。annotation更新前後のReplicaSetとrollout statusを見て、新系Readyと旧系縮退を判断します。_
 
 4) 履歴を確認します。
 

@@ -64,7 +64,9 @@ exit
 出力例（EndpointSlice / 名前解決 / Service 到達性）:
 
 <a id="figure-ch06-service-dns-01"></a>
-![Service と DNS の確認（例）](./images/ch06-service-dns-01.png)
+![ServiceのEndpointSlice・DNS・HTTP到達性を判断する出力](./images/ch06-service-dns-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、BusyBox 1.36.1。Service、EndpointSlice、cluster DNS、HTTP_SERVICE_OKを順に見て、名前解決だけでなく到達性まで判断します。_
 
 ## よくある落とし穴
 - selector が一致せず、Endpoints が空になる（`kubectl describe svc` で確認する）

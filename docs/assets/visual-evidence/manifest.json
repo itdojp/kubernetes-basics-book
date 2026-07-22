@@ -1,0 +1,417 @@
+{
+  "schemaVersion": 1,
+  "issue": 13,
+  "policy": "Actual command output only. Source commands and displayed transcripts are sanitized representations; fabricated operational state is prohibited.",
+  "captureRun": "https://github.com/itdojp/kubernetes-basics-book/actions/runs/29950486455",
+  "entries": [
+    {
+      "id": "ch00-podman-version",
+      "chapter": "chapter00",
+      "file": "src/chapters/chapter00/images/ch00-podman-version-01.png",
+      "alt": "Podmanの実行環境とrootless境界を判断するversion情報",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04.3 LTS（WSL2）、Podman 4.9.3、Go 1.22.2。client version、rootless=true、cgroups v2、Netavarkを見て、後続ハンズオンの実行境界を判断します。",
+      "environment": "Ubuntu 24.04.3 LTS on WSL2; local isolated rootless Podman capture",
+      "versions": {
+        "Podman": "4.9.3",
+        "Go": "1.22.2",
+        "OS": "Ubuntu 24.04.3 LTS",
+        "cgroups": "v2",
+        "networkBackend": "Netavark"
+      },
+      "maskedFields": [],
+      "captureSource": "local isolated command capture",
+      "setupSummary": "Read-only Podman version and selected podman info fields.",
+      "docsFile": "docs/chapters/chapter00/images/ch00-podman-version-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "podman version --format json | jq '{client:.Client.Version,go:.Client.GoVersion,osArch:.Client.OsArch}'",
+        "podman info --format json | jq '{rootless:.host.security.rootless,cgroupVersion:.host.cgroupVersion,networkBackend:.host.networkBackend}'"
+      ],
+      "displayedTranscript": "$ podman version --format json | jq '{client:.Client.Version,go:.Client.GoVersion,osArch:.Client.OsArch}'\n{\n  \"client\": \"4.9.3\",\n  \"go\": \"go1.22.2\",\n  \"osArch\": \"linux/amd64\"\n}\n\n$ podman info --format json | jq '{rootless:.host.security.rootless,cgroupVersion:.host.cgroupVersion,networkBackend:.host.networkBackend}'\n{\n  \"rootless\": true,\n  \"cgroupVersion\": \"v2\",\n  \"networkBackend\": \"netavark\"\n}\n",
+      "width": 1400,
+      "height": 607,
+      "bytes": 47549,
+      "sha256": "e2472f0a83c6993110393bae336b317b8be1b9477c5cf8d2e3a1269cbae918c9"
+    },
+    {
+      "id": "ch00-nginx-http",
+      "chapter": "chapter00",
+      "file": "src/chapters/chapter00/images/ch00-nginx-http-02.png",
+      "alt": "Nginxコンテナの起動からHTTP 200までの疎通を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04.3 LTS（WSL2）、Podman 4.9.3、Nginx 1.27.5-alpine。pull、port publish、HTTP 200、access log、停止を同じ対象で確認し、コンテナ内portとhost側到達性を判断します。",
+      "environment": "Ubuntu 24.04.3 LTS on WSL2; local isolated rootless Podman capture",
+      "versions": {
+        "Podman": "4.9.3",
+        "Nginx": "1.27.5-alpine",
+        "OS": "Ubuntu 24.04.3 LTS"
+      },
+      "maskedFields": [
+        "container/image identifiers",
+        "loopback source IP",
+        "access-log timestamp",
+        "capture label"
+      ],
+      "captureSource": "local isolated command capture",
+      "setupSummary": "Ephemeral labeled Nginx container on an unprivileged host port; removed after capture.",
+      "docsFile": "docs/chapters/chapter00/images/ch00-nginx-http-02.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "podman pull --quiet docker.io/library/nginx:1.27.5-alpine",
+        "podman run -d --name kbb-nginx --label [masked-label] -p 18081:80 docker.io/library/nginx:1.27.5-alpine",
+        "curl -sS -o /dev/null -w 'HTTP %{http_code}\\n' http://localhost:18081/",
+        "podman logs --tail 1 kbb-nginx",
+        "podman stop kbb-nginx"
+      ],
+      "displayedTranscript": "$ podman pull --quiet docker.io/library/nginx:1.27.5-alpine\n[masked-container-or-image-id]\n\n$ podman run -d --name kbb-nginx --label [masked-label] -p 18081:80 docker.io/library/nginx:1.27.5-alpine\n[masked-container-or-image-id]\n\n$ curl -sS -o /dev/null -w 'HTTP %{http_code}\\n' http://localhost:18081/\nHTTP 200\n\n$ podman logs --tail 1 kbb-nginx\n[masked-ip] - - [masked-time] \"GET / HTTP/1.1\" 200 615 \"-\" \"curl/8.5.0\" \"-\"\n\n$ podman stop kbb-nginx\nkbb-nginx\n",
+      "width": 1400,
+      "height": 607,
+      "bytes": 60517,
+      "sha256": "bcecc8d2589259acc73776a3cb0ef264c488f69e62d26f3cc6a4705065d39f97"
+    },
+    {
+      "id": "ch01-api-explore",
+      "chapter": "chapter01",
+      "file": "src/chapters/chapter01/images/ch01-kubectl-explore-01.png",
+      "alt": "Kubernetes API資源とPod・Deploymentフィールドの探索結果を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。api-resourcesとexplainの結果から、対象APIとPod・Deploymentフィールドをマニフェスト作成前に判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Disposable kind cluster created from pinned kindest/node:v1.35.0.",
+      "docsFile": "docs/chapters/chapter01/images/ch01-kubectl-explore-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl api-resources | sed -n '1,12p'",
+        "kubectl explain pod.spec | sed -n '1,24p'",
+        "kubectl explain deployment.spec.template.spec.containers | sed -n '1,16p'"
+      ],
+      "displayedTranscript": "$ kubectl api-resources | sed -n '1,12p'\nNAME                                SHORTNAMES   APIVERSION                        NAMESPACED   KIND\nbindings                                         v1                                true         Binding\ncomponentstatuses                   cs           v1                                false        ComponentStatus\nconfigmaps                          cm           v1                                true         ConfigMap\nendpoints                           ep           v1                                true         Endpoints\nevents                              ev           v1                                true         Event\nlimitranges                         limits       v1                                true         LimitRange\nnamespaces                          ns           v1                                false        Namespace\nnodes                               no           v1                                false        Node\npersistentvolumeclaims              pvc          v1                                true         PersistentVolumeClaim\npersistentvolumes                   pv           v1                                false        PersistentVolume\npods                                po           v1                                true         Pod\n\n$ kubectl explain pod.spec | sed -n '1,24p'\nKIND:       Pod\nVERSION:    v1\n\nFIELD: spec <PodSpec>\n\n\nDESCRIPTION:\n    Specification of the desired behavior of the pod. More info:\n    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n    PodSpec is a description of a pod.\n\nFIELDS:\n  activeDeadlineSeconds\t<integer>\n    Optional duration in seconds the pod may be active on the node relative to\n    StartTime before the system will actively try to mark it failed and kill\n    associated containers. Value must be a positive integer.\n\n  affinity\t<Affinity>\n    If specified, the pod's scheduling constraints\n\n  automountServiceAccountToken\t<boolean>\n    AutomountServiceAccountToken indicates whether a service account token\n    should be automatically mounted.\n\n\n$ kubectl explain deployment.spec.template.spec.containers | sed -n '1,16p'\nGROUP:      apps\nKIND:       Deployment\nVERSION:    v1\n\nFIELD: containers <[]Container>\n\n\nDESCRIPTION:\n    List of containers belonging to the pod. Containers cannot currently be\n    added or removed. There must be at least one container in a Pod. Cannot be\n    updated.\n    A single application container that you want to run within a pod.\n\nFIELDS:\n  args\t<[]string>\n    Arguments to the entrypoint. The container image's CMD is used if this is\n",
+      "width": 1400,
+      "height": 2188,
+      "bytes": 201622,
+      "sha256": "2d927b65f8d0ab897565004302d3223d47ab2b82f06cac524706ea7c378d52f3"
+    },
+    {
+      "id": "ch02-kind-bootstrap",
+      "chapter": "chapter02",
+      "file": "src/chapters/chapter02/images/ch02-kind-bootstrap-01.png",
+      "alt": "kindクラスタ作成後のcontrol plane・node・namespace readinessを判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、kind 0.31.0、Kubernetes 1.35.0、kubectl 1.35.1、Docker 28.0.4。cluster-info、Ready node、demo namespaceを順に見て、操作対象の準備完了を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster with Docker 28.0.4",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0",
+        "Docker": "28.0.4"
+      },
+      "maskedFields": [
+        "cluster name",
+        "kubectl context",
+        "kubeconfig workspace path",
+        "control-plane node name",
+        "IPv4 addresses",
+        "kind status emoji normalized to ASCII"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Pinned kind node image with localhost-only 8080/8443 mappings.",
+      "docsFile": "docs/chapters/chapter02/images/ch02-kind-bootstrap-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kind create cluster --image kindest/node:v1.35.0 --config kind.yaml",
+        "kubectl cluster-info",
+        "kubectl get nodes -o wide",
+        "kubectl get namespace demo"
+      ],
+      "displayedTranscript": "$ kind create cluster --image kindest/node:v1.35.0 --config kind.yaml\nCreating cluster \"[masked-cluster]\" ...\n - Ensuring node image (kindest/node:v1.35.0) [image]  ...\n [ok] Ensuring node image (kindest/node:v1.35.0) [image]\n - Preparing nodes [container]   ...\n [ok] Preparing nodes [container]\n - Writing configuration [config]  ...\n [ok] Writing configuration [config]\n - Starting control-plane [control-plane]  ...\n [ok] Starting control-plane [control-plane]\n - Installing CNI [network]  ...\n [ok] Installing CNI [network]\n - Installing StorageClass [storage]  ...\n [ok] Installing StorageClass [storage]\nSet kubectl context to \"[masked-context]\"\nYou can now use your cluster with:\n\nkubectl cluster-info --context [masked-context] --kubeconfig [masked-workspace]\n\nHave a nice day!\n\n$ kubectl cluster-info\nKubernetes control plane is running at https://[masked-ip]:43547\nCoreDNS is running at https://[masked-ip]:43547/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy\n\nTo further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.\n\n$ kubectl get nodes -o wide\nNAME                    STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION      CONTAINER-RUNTIME\n[masked-node]   Ready    control-plane   27s   v1.35.0   [masked-ip]    <none>        Debian GNU/Linux 12 (bookworm)   6.17.0-1020-azure   containerd://2.2.0\n\n$ kubectl get namespace demo\nNAME   STATUS   AGE\ndemo   Active   23s\n",
+      "width": 1400,
+      "height": 1289,
+      "bytes": 152901,
+      "sha256": "d2ce943ed613cfcfa9f0e0ebbc9513d91dfdcafa4ca43420ebf22712e73acbda"
+    },
+    {
+      "id": "ch03-label-selector",
+      "chapter": "chapter03",
+      "file": "src/chapters/chapter03/images/ch03-kubectl-show-labels-01.png",
+      "alt": "DeploymentとPodのlabel・selector整合を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。DeploymentとPodの共通label、Ready数、selectorの仕様を照合し、選択対象の整合を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Two-replica demo Deployment using non-identifying labels.",
+      "docsFile": "docs/chapters/chapter03/images/ch03-kubectl-show-labels-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo get deploy,pod --show-labels",
+        "kubectl -n demo get pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance=demo",
+        "kubectl explain deployment.spec.selector | sed -n '1,18p'"
+      ],
+      "displayedTranscript": "$ kubectl -n demo get deploy,pod --show-labels\nNAME                  READY   UP-TO-DATE   AVAILABLE   AGE   LABELS\ndeployment.apps/web   2/2     2            2           23s   app.kubernetes.io/instance=demo,app.kubernetes.io/name=web\n\nNAME                       READY   STATUS    RESTARTS   AGE   LABELS\npod/web-77d5b9bc56-nqhdg   1/1     Running   0          18s   app.kubernetes.io/instance=demo,app.kubernetes.io/name=web,pod-template-hash=77d5b9bc56\npod/web-77d5b9bc56-trwl6   1/1     Running   0          18s   app.kubernetes.io/instance=demo,app.kubernetes.io/name=web,pod-template-hash=77d5b9bc56\n\n$ kubectl -n demo get pod -l app.kubernetes.io/name=web,app.kubernetes.io/instance=demo\nNAME                   READY   STATUS    RESTARTS   AGE\nweb-77d5b9bc56-nqhdg   1/1     Running   0          18s\nweb-77d5b9bc56-trwl6   1/1     Running   0          18s\n\n$ kubectl explain deployment.spec.selector | sed -n '1,18p'\nGROUP:      apps\nKIND:       Deployment\nVERSION:    v1\n\nFIELD: selector <LabelSelector>\n\n\nDESCRIPTION:\n    Label selector for pods. Existing ReplicaSets whose pods are selected by\n    this will be the ones affected by this deployment. It must match the pod\n    template's labels.\n    A label selector is a label query over a set of resources. The result of\n    matchLabels and matchExpressions are ANDed. An empty label selector matches\n    all objects. A null label selector matches no objects.\n\nFIELDS:\n  matchExpressions\t<[]LabelSelectorRequirement>\n    matchExpressions is a list of label selector requirements. The requirements\n",
+      "width": 1400,
+      "height": 1227,
+      "bytes": 144618,
+      "sha256": "8ace33891d4d88037369c62a0bbd189ae0eee12de0fcd90b050a1697f7b6e123"
+    },
+    {
+      "id": "ch04-pod-design",
+      "chapter": "chapter04",
+      "file": "src/chapters/chapter04/images/ch04-kubectl-describe-pod-01.png",
+      "alt": "PodのProbe・resources・Ready・QoSを判断するdescribe出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、Nginx 1.27.5-alpine。readiness/liveness、requests/limits、Ready、restart、QoSを分けて見てPod設計の反映を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "Nginx": "1.27.5-alpine"
+      },
+      "maskedFields": [
+        "container identifiers",
+        "container start times"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Two-replica Deployment with probes and resource requests/limits.",
+      "docsFile": "docs/chapters/chapter04/images/ch04-kubectl-describe-pod-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo describe pod -l app.kubernetes.io/name=web | sed -n '/Containers:/,/Conditions:/p'",
+        "kubectl -n demo get pod -l app.kubernetes.io/name=web -o custom-columns=NAME:.metadata.name,READY:.status.containerStatuses[0].ready,RESTARTS:.status.containerStatuses[0].restartCount,QOS:.status.qosClass"
+      ],
+      "displayedTranscript": "$ kubectl -n demo describe pod -l app.kubernetes.io/name=web | sed -n '/Containers:/,/Conditions:/p'\nContainers:\n  web:\n    Container ID:   [masked-container-id]\n    Image:          nginx:1.27.5-alpine\n    Image ID:       docker.io/library/nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10\n    Port:           80/TCP\n    Host Port:      0/TCP\n    State:          Running\n      Started:      Wed, 22 Jul 2026 [masked-time] +0000\n    Ready:          True\n    Restart Count:  0\n    Limits:\n      cpu:     200m\n      memory:  128Mi\n    Requests:\n      cpu:        50m\n      memory:     32Mi\n    Liveness:     http-get http://:80/ delay=5s timeout=1s period=5s #success=1 #failure=3\n    Readiness:    http-get http://:80/ delay=2s timeout=1s period=3s #success=1 #failure=3\n    Environment:  <none>\n    Mounts:\n      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-nd285 (ro)\nConditions:\nContainers:\n  web:\n    Container ID:   [masked-container-id]\n    Image:          nginx:1.27.5-alpine\n    Image ID:       docker.io/library/nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10\n    Port:           80/TCP\n    Host Port:      0/TCP\n    State:          Running\n      Started:      Wed, 22 Jul 2026 [masked-time] +0000\n    Ready:          True\n    Restart Count:  0\n    Limits:\n      cpu:     200m\n      memory:  128Mi\n    Requests:\n      cpu:        50m\n      memory:     32Mi\n    Liveness:     http-get http://:80/ delay=5s timeout=1s period=5s #success=1 #failure=3\n    Readiness:    http-get http://:80/ delay=2s timeout=1s period=3s #success=1 #failure=3\n    Environment:  <none>\n    Mounts:\n      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6tfkd (ro)\nConditions:\n\n$ kubectl -n demo get pod -l app.kubernetes.io/name=web -o custom-columns=NAME:.metadata.name,READY:.status.containerStatuses[0].ready,RESTARTS:.status.containerStatuses[0].restartCount,QOS:.status.qosClass\nNAME                   READY   RESTARTS   QOS\nweb-77d5b9bc56-nqhdg   true    0          Burstable\nweb-77d5b9bc56-trwl6   true    0          Burstable\n",
+      "width": 1400,
+      "height": 1878,
+      "bytes": 212852,
+      "sha256": "d8ad3446933ca0eeb1537f92541f9efaac9ddd2d9e406fb8e6ddda897c09e323"
+    },
+    {
+      "id": "ch05-rollout",
+      "chapter": "chapter05",
+      "file": "src/chapters/chapter05/images/ch05-rollout-rs-01.png",
+      "alt": "新旧ReplicaSetの切替とrollout成功を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。annotation更新前後のReplicaSetとrollout statusを見て、新系Readyと旧系縮退を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Ephemeral annotation patch generated a Deployment rollout.",
+      "docsFile": "docs/chapters/chapter05/images/ch05-rollout-rs-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo get rs",
+        "kubectl -n demo patch deploy web -p '{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"rollme\":\"issue13\"}}}}}'",
+        "kubectl -n demo rollout status deploy/web",
+        "kubectl -n demo get rs"
+      ],
+      "displayedTranscript": "$ kubectl -n demo get rs\nNAME             DESIRED   CURRENT   READY   AGE\nweb-77d5b9bc56   2         2         2       19s\n\n$ kubectl -n demo patch deploy web -p '{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"rollme\":\"issue13\"}}}}}'\ndeployment.apps/web patched\n\n$ kubectl -n demo rollout status deploy/web\nWaiting for deployment \"web\" rollout to finish: 1 out of 2 new replicas have been updated...\nWaiting for deployment \"web\" rollout to finish: 1 out of 2 new replicas have been updated...\nWaiting for deployment \"web\" rollout to finish: 1 out of 2 new replicas have been updated...\nWaiting for deployment \"web\" rollout to finish: 1 old replicas are pending termination...\nWaiting for deployment \"web\" rollout to finish: 1 old replicas are pending termination...\nWaiting for deployment \"web\" rollout to finish: 1 old replicas are pending termination...\ndeployment \"web\" successfully rolled out\n\n$ kubectl -n demo get rs\nNAME             DESIRED   CURRENT   READY   AGE\nweb-77d5b9bc56   0         0         0       25s\nweb-79df588659   2         2         2       6s\n",
+      "width": 1400,
+      "height": 793,
+      "bytes": 99983,
+      "sha256": "041bf3f17a51a9b632a2d58e4ece8118fbedf57fcd9ed306aecbb4627862f2f5"
+    },
+    {
+      "id": "ch06-service-dns",
+      "chapter": "chapter06",
+      "file": "src/chapters/chapter06/images/ch06-service-dns-01.png",
+      "alt": "ServiceのEndpointSlice・DNS・HTTP到達性を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、BusyBox 1.36.1。Service、EndpointSlice、cluster DNS、HTTP_SERVICE_OKを順に見て、名前解決だけでなく到達性まで判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "BusyBox": "1.36.1"
+      },
+      "maskedFields": [
+        "Service, EndpointSlice, and DNS IPv4 addresses"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "One-shot BusyBox Pod completed DNS and HTTP checks and was deleted.",
+      "docsFile": "docs/chapters/chapter06/images/ch06-service-dns-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo get svc web",
+        "kubectl -n demo get endpointslice -l kubernetes.io/service-name=web",
+        "kubectl -n demo run dns-check --restart=Never --image=busybox:1.36.1 -- sh -c 'nslookup web.demo.svc.cluster.local && wget -qO- http://web/ >/dev/null && echo HTTP_SERVICE_OK'",
+        "kubectl -n demo wait --for=jsonpath='{.status.phase}'=Succeeded pod/dns-check --timeout=120s",
+        "kubectl -n demo logs dns-check"
+      ],
+      "displayedTranscript": "$ kubectl -n demo get svc web\nNAME   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE\nweb    ClusterIP   [masked-ip]   <none>        80/TCP    32s\n\n$ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web\nNAME        ADDRESSTYPE   PORTS   ENDPOINTS               AGE\nweb-5bg7g   IPv4          80      [masked-ip],[masked-ip]   28s\n\n$ kubectl -n demo run dns-check --restart=Never --image=busybox:1.36.1 -- sh -c 'nslookup web.demo.svc.cluster.local && wget -qO- http://web/ >/dev/null && echo HTTP_SERVICE_OK'\npod/dns-check created\n\n$ kubectl -n demo wait --for=jsonpath='{.status.phase}'=Succeeded pod/dns-check --timeout=120s\npod/dns-check condition met\n\n$ kubectl -n demo logs dns-check\nServer:\t\t[masked-ip]\nAddress:\t[masked-ip]:53\n\nName:\tweb.demo.svc.cluster.local\nAddress: [masked-ip]\n\n\nHTTP_SERVICE_OK\n",
+      "width": 1400,
+      "height": 886,
+      "bytes": 95926,
+      "sha256": "8b2ca361c0c0b79281b05922ae16177b280f852c91aaa6bebb29e23dcb0e1566"
+    },
+    {
+      "id": "ch07-historical-ingress",
+      "chapter": "chapter07",
+      "file": "src/chapters/chapter07/images/ch07-ingress-nginx-01.png",
+      "alt": "retired済みingress-nginxのhistorical labでcontroller readinessとHost routing成功を判断する出力",
+      "caption": "2026-07-23（JST）取得。隔離kind環境、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0、ingress-nginx 1.14.3（retired）。checksum、controller 1/1、Ingress、HTTP_ROUTE_OKを見て歴史的labの再現成功を判断します。本番利用の推奨ではありません。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; isolated disposable historical lab only",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "ingress-nginx": "1.14.3 (retired)",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Pinned retired manifest commit and SHA-256; isolated localhost-only lab; cluster deleted after capture.",
+      "docsFile": "docs/chapters/chapter07/images/ch07-ingress-nginx-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "sha256sum --check ingress-nginx-kind-v1.14.3.yaml",
+        "kubectl -n ingress-nginx get deploy,pod",
+        "kubectl -n demo get ingress web",
+        "curl -fsS -H 'Host: web.local' http://localhost:8080/ >/dev/null && echo HTTP_ROUTE_OK"
+      ],
+      "displayedTranscript": "# Historical lab-only: ingress-nginx v1.14.3 is retired; do not use in production.\n$ sha256sum --check ingress-nginx-kind-v1.14.3.yaml\ningress-nginx-kind-v1.14.3.yaml: OK\n\n$ kubectl -n ingress-nginx get deploy,pod\nNAME                                       READY   UP-TO-DATE   AVAILABLE   AGE\ndeployment.apps/ingress-nginx-controller   1/1     1            1           21s\n\nNAME                                          READY   STATUS    RESTARTS   AGE\npod/ingress-nginx-controller-589b66c8-vz2kl   1/1     Running   0          21s\n\n$ kubectl -n demo get ingress web\nNAME   CLASS   HOSTS       ADDRESS   PORTS   AGE\nweb    nginx   web.local             80      4s\n\n$ curl -fsS -H 'Host: web.local' http://localhost:8080/ >/dev/null && echo HTTP_ROUTE_OK\nHTTP_ROUTE_OK\n",
+      "width": 1400,
+      "height": 669,
+      "bytes": 77129,
+      "sha256": "0faf7c43376e565bac2e70d9d9e86eb9adf8c9310f6b59a07c1074d9630fa321"
+    },
+    {
+      "id": "ch08-config-secret",
+      "chapter": "chapter08",
+      "file": "src/chapters/chapter08/images/ch08-configmap-secret-01.png",
+      "alt": "ConfigMap反映とSecretファイル存在・readOnly mountを秘密値なしで判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。ConfigMapのAPP_ENV、SecretのDATA数、ファイル存在、readOnly=trueを見て注入を判断し、秘密値は表示しません。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [
+        "ephemeral Secret value omitted from capture"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Ephemeral Secret created during setup; only metadata, file existence, and read-only state captured.",
+      "docsFile": "docs/chapters/chapter08/images/ch08-configmap-secret-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo get configmap web-config",
+        "kubectl -n demo get secret web-secret",
+        "kubectl -n demo exec deploy/web -- sh -c 'printf \"APP_ENV=%s\\n\" \"$APP_ENV\"; test -s /etc/secret/password && echo SECRET_FILE_PRESENT'",
+        "kubectl -n demo get deploy web -o jsonpath='{.spec.template.spec.containers[0].volumeMounts[0].readOnly}'"
+      ],
+      "displayedTranscript": "$ kubectl -n demo get configmap web-config\nNAME         DATA   AGE\nweb-config   1      9s\n\n$ kubectl -n demo get secret web-secret\nNAME         TYPE     DATA   AGE\nweb-secret   Opaque   1      9s\n\n$ kubectl -n demo exec deploy/web -- sh -c 'printf \"APP_ENV=%s\\n\" \"$APP_ENV\"; test -s /etc/secret/password && echo SECRET_FILE_PRESENT'\nAPP_ENV=dev\nSECRET_FILE_PRESENT\n\n$ kubectl -n demo get deploy web -o jsonpath='{.spec.template.spec.containers[0].volumeMounts[0].readOnly}'\nreadOnly=true\n",
+      "width": 1400,
+      "height": 638,
+      "bytes": 62151,
+      "sha256": "6f16355e99b03ec8157fd0e8cb6e85a7b3c6bfcdbf81d9e913dade9e55a8d987"
+    },
+    {
+      "id": "ch09-pvc",
+      "chapter": "chapter09",
+      "file": "src/chapters/chapter09/images/ch09-pvc-mount-01.png",
+      "alt": "StorageClass・PVC Bound・mount後データ読取を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。standard（default）StorageClass、PVC Bound、Pod Ready、hello読取を見てmount成功を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [
+        "dynamically generated PersistentVolume identifier"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "kind-provided standard default StorageClass was used; pinned local-path-provisioner v0.0.34 was also present as a non-default comparison.",
+      "docsFile": "docs/chapters/chapter09/images/ch09-pvc-mount-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl get storageclass",
+        "kubectl -n demo wait --for=condition=Ready pod/pvc-check --timeout=180s",
+        "kubectl -n demo get pvc web-pvc",
+        "kubectl -n demo exec pvc-check -- cat /data/hello.txt"
+      ],
+      "displayedTranscript": "$ kubectl get storageclass\nNAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE\nlocal-path           rancher.io/local-path   Delete          WaitForFirstConsumer   false                  7s\nstandard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  71s\n\n$ kubectl -n demo wait --for=condition=Ready pod/pvc-check --timeout=180s\npod/pvc-check condition met\n\n$ kubectl -n demo get pvc web-pvc\nNAME      STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE\nweb-pvc   Bound    pvc-[masked-volume-id]   1Gi        RWO            standard       <unset>                 5s\n\n$ kubectl -n demo exec pvc-check -- cat /data/hello.txt\nhello\n",
+      "width": 1400,
+      "height": 731,
+      "bytes": 74194,
+      "sha256": "d8660b561c84dc976391abc0bded47e8c68aab4a173bc4c469ec53fafbccb594"
+    },
+    {
+      "id": "ch10-selector-debug",
+      "chapter": "chapter10",
+      "file": "src/chapters/chapter10/images/ch10-service-selector-debug-01.png",
+      "alt": "Service selector不整合によるEndpoint消失と復旧を判断する出力",
+      "caption": "2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。正常Endpoint、誤selector、ENDPOINTS未設定、selector復元、Endpoint再出現を比較し、原因と復旧を判断します。",
+      "environment": "Ubuntu 24.04 GitHub-hosted runner; disposable kind cluster",
+      "versions": {
+        "Kubernetes": "1.35.0",
+        "kubectl": "1.35.1",
+        "kind": "0.31.0"
+      },
+      "maskedFields": [
+        "EndpointSlice IPv4 addresses"
+      ],
+      "captureSource": "GitHub Actions run 29950486455",
+      "setupSummary": "Intentional selector mismatch was restored in the disposable cluster.",
+      "docsFile": "docs/chapters/chapter10/images/ch10-service-selector-debug-01.png",
+      "sourceKind": "terminal-output",
+      "capturedAt": "2026-07-23",
+      "captureTimezone": "Asia/Tokyo (UTC+09:00)",
+      "dateBasis": "Command execution occurred on 2026-07-23 JST.",
+      "sourceCommands": [
+        "kubectl -n demo get endpointslice -l kubernetes.io/service-name=web",
+        "kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web-wrong\"}}}'",
+        "kubectl -n demo get endpointslice -l kubernetes.io/service-name=web",
+        "kubectl -n demo get svc web -o jsonpath='{.spec.selector}'",
+        "kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web\",\"app.kubernetes.io/instance\":\"demo\"}}}'",
+        "kubectl -n demo get endpointslice -l kubernetes.io/service-name=web"
+      ],
+      "displayedTranscript": "$ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web\nNAME        ADDRESSTYPE   PORTS   ENDPOINTS                 AGE\nweb-5bg7g   IPv4          80      [masked-ip],[masked-ip]   66s\n\n$ kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web-wrong\"}}}'\nservice/web patched\n\n$ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web\nNAME        ADDRESSTYPE   PORTS     ENDPOINTS   AGE\nweb-5bg7g   IPv4          <unset>   <unset>     68s\n\n$ kubectl -n demo get svc web -o jsonpath='{.spec.selector}'\n{\"app.kubernetes.io/instance\":\"demo\",\"app.kubernetes.io/name\":\"web-wrong\"}\n\n$ kubectl -n demo patch svc web -p '{\"spec\":{\"selector\":{\"app.kubernetes.io/name\":\"web\",\"app.kubernetes.io/instance\":\"demo\"}}}'\nservice/web patched\n\n$ kubectl -n demo get endpointslice -l kubernetes.io/service-name=web\nNAME        ADDRESSTYPE   PORTS   ENDPOINTS                 AGE\nweb-5bg7g   IPv4          80      [masked-ip],[masked-ip]   70s\n",
+      "width": 1400,
+      "height": 793,
+      "bytes": 95180,
+      "sha256": "a54e7f52589dcdaac81275cdc4dcfab7c0deec40f18422b9bc6c9447891f0541"
+    }
+  ]
+}

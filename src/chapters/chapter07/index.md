@@ -123,7 +123,9 @@ curl -fsS -H 'Host: web.local' http://localhost:8080/ > /dev/null
 出力例（ingress-nginx の歴史的 lab：導入〜Ingress 作成〜疎通確認）:
 
 <a id="figure-ch07-ingress-nginx-01"></a>
-![ingress-nginx の導入と Host ルーティング（歴史的な学習例）](./images/ch07-ingress-nginx-01.png)
+![retired済みingress-nginxのhistorical labでcontroller readinessとHost routing成功を判断する出力](./images/ch07-ingress-nginx-01.png)
+
+_2026-07-23（JST）取得。隔離kind環境、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0、ingress-nginx 1.14.3（retired）。checksum、controller 1/1、Ingress、HTTP_ROUTE_OKを見て歴史的labの再現成功を判断します。本番利用の推奨ではありません。_
 
 ### （任意）ブラウザで確認する
 DNS が無い環境でも、hosts を使うとブラウザで確認できます（管理者権限が必要です）。

@@ -132,7 +132,9 @@ kubectl explain deployment.spec.selector
 出力例（labels が `Deployment` と `Pod` に付与されていることの確認）:
 
 <a id="figure-ch03-kubectl-show-labels-01"></a>
-![labels の確認（例）](./images/ch03-kubectl-show-labels-01.png)
+![DeploymentとPodのlabel・selector整合を判断する出力](./images/ch03-kubectl-show-labels-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。DeploymentとPodの共通label、Ready数、selectorの仕様を照合し、選択対象の整合を判断します。_
 
 ## よくある落とし穴
 - Selector に使う label を後から変更しようとして、Service/Deployment の紐付けが崩れる

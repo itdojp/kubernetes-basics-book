@@ -162,3 +162,29 @@
 - [ ] 端末: `kubectl -n demo describe pod ...` の Events 抜粋（原因の手掛かりが分かる）
 - [ ] 端末: `kubectl -n demo logs ...` の典型例（エラーが分かる）
 - [ ] 端末: `kubectl -n demo get events --sort-by=.lastTimestamp`（時系列/優先度で追える。補足: `--sort-by=.metadata.creationTimestamp` でも可）
+
+## 公開済みP0 visual evidence（Issue #13）
+
+以下の12点をP0の公開対象とします。画像は実command出力をmaskしたもので、画面上の値を固定仕様として扱いません。
+
+- [x] `ch00-podman-version-01.png`: Podmanの実行境界
+- [x] `ch00-nginx-http-02.png`: container起動からHTTP 200まで
+- [x] `ch01-kubectl-explore-01.png`: API資源とfield探索
+- [x] `ch02-kind-bootstrap-01.png`: cluster/node/namespace readiness
+- [x] `ch03-kubectl-show-labels-01.png`: label/selector整合
+- [x] `ch04-kubectl-describe-pod-01.png`: Probe/resources/Ready/QoS
+- [x] `ch05-rollout-rs-01.png`: ReplicaSet切替とrollout成功
+- [x] `ch06-service-dns-01.png`: EndpointSlice/DNS/HTTP到達性
+- [x] `ch07-ingress-nginx-01.png`: retired ingress-nginxのhistorical lab疎通（本番非推奨）
+- [x] `ch08-configmap-secret-01.png`: 秘密値を表示しないConfigMap/Secret注入確認
+- [x] `ch09-pvc-mount-01.png`: PVC Boundとmount後の読取
+- [x] `ch10-service-selector-debug-01.png`: selector不整合と復旧
+
+### provenanceとQA
+
+- canonical manifest: `src/assets/visual-evidence/manifest.json`
+- generated/public copy: `docs/assets/visual-evidence/manifest.json`
+- manifestには撮影日、timezone、環境、version、sanitized source command、mask項目、dimension、bytes、SHA-256を記録する
+- PNGの埋め込みtranscriptとmanifestを一致させ、画像だけの差し替えや未登録PNGをfail-closedにする
+- `npm run check:visual-evidence`でpath、src/docs同期、参照、alt/caption、provenance、sensitive marker、PNG payloadを検査する
+- raw transcript、Secret値、実IP、cluster/context/node名、runner pathはrepository、Issue、PR、artifactへ残さない

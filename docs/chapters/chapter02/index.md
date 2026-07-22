@@ -104,7 +104,9 @@ kubectl get ns demo
 出力例（`kind.yaml` の確認〜クラスタ作成〜Namespace 作成）:
 
 <a id="figure-ch02-kind-bootstrap-01"></a>
-![kind クラスタの作成と確認（例）](./images/ch02-kind-bootstrap-01.png)
+![kindクラスタ作成後のcontrol plane・node・namespace readinessを判断する出力](./images/ch02-kind-bootstrap-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、kind 0.31.0、Kubernetes 1.35.0、kubectl 1.35.1、Docker 28.0.4。cluster-info、Ready node、demo namespaceを順に見て、操作対象の準備完了を判断します。_
 
 ## kubectl 基本操作（最小セット）
 
