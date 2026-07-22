@@ -114,6 +114,9 @@ function decodePng(buffer) {
   if (!header.width || !header.height || header.compression !== 0 || header.filter !== 0 || header.interlace !== 0) {
     return { error: 'unsupported or invalid IHDR fields' };
   }
+  if (header.width < MIN_WIDTH || header.width > MAX_WIDTH || header.height < MIN_HEIGHT || header.height > MAX_HEIGHT) {
+    return { error: `image dimensions ${header.width}x${header.height} are outside the safety limits` };
+  }
   const colorTypes = {
     0: { channels: 1, depths: [1, 2, 4, 8, 16] }, 2: { channels: 3, depths: [8, 16] },
     4: { channels: 2, depths: [8, 16] }, 6: { channels: 4, depths: [8, 16] },

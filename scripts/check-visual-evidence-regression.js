@@ -56,9 +56,26 @@ function expectSuccess(name, mutate, restore) {
   }
 }
 
+function expectFailureWhenSupported(name, evidence, mutate, restore) {
+  try {
+    try {
+      mutate();
+    } catch (error) {
+      if (['EACCES', 'ENOSYS', 'EPERM'].includes(error.code)) return false;
+      throw error;
+    }
+    const errors = validateVisualEvidence(fixtureRoot);
+    if (!errors.some((error) => error.includes(evidence))) throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
+    return true;
+  } finally {
+    restore();
+  }
+}
+
 for (const item of ['src', 'docs', 'package.json', 'SCREENSHOTS.md', '.github/workflows/book-qa.yml']) copy(item);
 const baselineManifest = fs.readFileSync(manifestPath, 'utf8');
 let passed = 0;
+let skipped = 0;
 
 try {
   const cases = [
@@ -129,15 +146,18 @@ try {
     () => fs.copyFileSync(sourceImage, extraUpper), () => fs.rmSync(extraUpper, { force: true }));
   passed += 1;
   const symlink = path.join(fixtureRoot, 'src/chapters/chapter00/images/symlink.png');
-  expectFailure('untracked symlink PNG', 'untracked src screenshot PNG',
-    () => fs.symlinkSync('ch00-podman-version-01.png', symlink), () => fs.rmSync(symlink, { force: true }));
-  passed += 1;
+  if (expectFailureWhenSupported('untracked symlink PNG', 'untracked src screenshot PNG',
+    () => fs.symlinkSync('ch00-podman-version-01.png', symlink), () => fs.rmSync(symlink, { force: true }))) {
+    passed += 1;
+  } else {
+    skipped += 1;
+  }
 
   expectFailure('truncated PNG', 'not a complete decodable PNG',
     () => fs.writeFileSync(sourceImage, baselineImage.subarray(0, 40)),
     () => fs.writeFileSync(sourceImage, baselineImage));
   passed += 1;
-  expectFailure('oversized decoded PNG', 'decoded image exceeds the safety limit',
+  expectFailure('oversized decoded PNG', 'image dimensions 100000x100000 are outside the safety limits',
     () => {
       const oversized = Buffer.from(baselineImage);
       oversized.writeUInt32BE(100000, 16);
@@ -214,7 +234,7 @@ try {
 
   const finalErrors = validateVisualEvidence(fixtureRoot);
   if (finalErrors.length) throw new Error(`Restored fixture failed:\n${finalErrors.join('\n')}`);
-  console.log(`Visual-evidence regression passed: ${passed}/${passed} negative mutations, 1/1 CRLF portability, 1/1 restored baseline.`);
+  console.log(`Visual-evidence regression passed: ${passed}/${passed} negative mutations, ${skipped} unsupported-platform skips, 1/1 CRLF portability, 1/1 restored baseline.`);
 } finally {
   fs.rmSync(fixtureRoot, { recursive: true, force: true });
 }
