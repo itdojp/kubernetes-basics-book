@@ -158,21 +158,34 @@ function count(text, value) {
 
 function workflowRunsCommand(workflow, command) {
   const lines = workflow.replace(/\r\n/g, '\n').split('\n');
+  let stepsIndent = null;
+  let stepIndent = null;
   for (let index = 0; index < lines.length; index += 1) {
-    const match = lines[index].match(/^(\s*)run:\s*(.*?)\s*$/);
-    if (!match) continue;
-    const indent = match[1].length;
-    const scalar = match[2].trim();
-    if (scalar === command || scalar === `'${command}'` || scalar === `"${command}"`) return true;
-    if (!/^[|>][-+]?\d*$/.test(scalar)) continue;
-    for (let nested = index + 1; nested < lines.length; nested += 1) {
-      const line = lines[nested];
-      if (!line.trim()) continue;
-      const nestedIndent = line.match(/^\s*/)[0].length;
-      if (nestedIndent <= indent) break;
-      const executable = line.trim();
-      if (!executable.startsWith('#') && executable === command) return true;
+    const line = lines[index];
+    if (!line.trim() || line.trimStart().startsWith('#')) continue;
+    const indent = line.match(/^\s*/)[0].length;
+    const steps = line.match(/^(\s*)steps:\s*$/);
+    if (steps) {
+      stepsIndent = steps[1].length;
+      stepIndent = null;
+      continue;
     }
+    if (stepsIndent === null) continue;
+    if (indent <= stepsIndent) {
+      stepsIndent = null;
+      stepIndent = null;
+      continue;
+    }
+    const step = line.match(/^(\s*)-\s+(.*)$/);
+    if (step && step[1].length === stepsIndent + 2) {
+      stepIndent = step[1].length;
+      const inlineRun = step[2].match(/^run:\s*(.*?)\s*$/);
+      if (inlineRun && [command, `'${command}'`, `"${command}"`].includes(inlineRun[1])) return true;
+      continue;
+    }
+    if (stepIndent === null || indent !== stepIndent + 2) continue;
+    const directRun = line.trim().match(/^run:\s*(.*?)\s*$/);
+    if (directRun && [command, `'${command}'`, `"${command}"`].includes(directRun[1])) return true;
   }
   return false;
 }
