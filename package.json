@@ -23,5 +23,8 @@
     "type": "git",
     "url": "https://github.com/itdojp/kubernetes-basics-book.git"
   },
-  "homepage": "https://itdojp.github.io/kubernetes-basics-book"
+  "homepage": "https://itdojp.github.io/kubernetes-basics-book",
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
