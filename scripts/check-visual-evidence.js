@@ -161,12 +161,19 @@ function workflowRunsCommand(workflow, command) {
   let stepsIndent = null;
   let stepIndent = null;
   let step = null;
+  let blockScalarIndent = null;
   const exactCommand = (scalar) => [command, `'${command}'`, `"${command}"`].includes(scalar);
   const eligible = () => step && exactCommand(step.run) && !step.conditional && !step.failureTolerant;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
-    if (!line.trim() || line.trimStart().startsWith('#')) continue;
+    if (!line.trim()) continue;
     const indent = line.match(/^\s*/)[0].length;
+    if (blockScalarIndent !== null) {
+      if (indent > blockScalarIndent) continue;
+      blockScalarIndent = null;
+    }
+    if (line.trimStart().startsWith('#')) continue;
+    if (/:\s*[|>][0-9+-]*\s*(?:#.*)?$/.test(line)) blockScalarIndent = indent;
     const steps = line.match(/^(\s*)steps:\s*$/);
     if (steps) {
       if (eligible()) return true;
