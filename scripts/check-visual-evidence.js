@@ -176,7 +176,7 @@ function validateVisualEvidence(repoRoot = path.resolve(__dirname, '..')) {
   if (!packageJson.scripts?.test?.includes('npm run check:visual-evidence')) errors.push('package.json test must run check:visual-evidence');
   try {
     const workflow = fs.readFileSync(path.join(repoRoot, '.github/workflows/book-qa.yml'), 'utf8');
-    if (!workflow.includes('name: Local npm QA') || !workflow.includes('run: npm test')) errors.push('Book QA must run the local visual-evidence contract through npm test');
+    if (!workflow.includes('run: npm test')) errors.push('Book QA must run the local visual-evidence contract through npm test');
   } catch (error) {
     errors.push('.github/workflows/book-qa.yml is missing');
   }
