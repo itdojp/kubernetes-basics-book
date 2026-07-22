@@ -94,7 +94,9 @@ kubectl -n demo exec pvc-check -- cat /data/hello.txt
 出力例（PVC 作成〜Pod でのマウント〜データ永続化の確認。PVC が `Bound` になり、Pod から `/data/hello.txt` を読めることを確認）:
 
 <a id="figure-ch09-pvc-mount-01"></a>
-![PVC の作成とマウント（例）](./images/ch09-pvc-mount-01.png)
+![StorageClass・PVC Bound・mount後データ読取を判断する出力](./images/ch09-pvc-mount-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。standard（default）StorageClass、PVC Bound、Pod Ready、hello読取を見てmount成功を判断します。_
 
 ここでは PVC が `Bound` であることと、Pod から `/data/hello.txt` を読めることが確認ポイントです。
 

@@ -10,14 +10,14 @@
 
 ## 第0章：コンテナ基礎ダイジェスト
 
-### 図E-01：podman version（例）
+### 図E-01：Podmanの実行環境とrootless境界を判断するversion情報
 
 - **図版リンク**: [第0章の図版へ移動](../../chapters/chapter00/#figure-ch00-podman-version-01)
 - **ファイル**: `ch00-podman-version-01.png`
-- **目的**: Podman のクライアントとサーバーのバージョン情報を確認する入口です。
-- **確認の観点**: 実行環境で `podman version` を実行し、クライアントとサーバーの情報が取得できるか、対象環境のランタイムであるかを確認します。
+- **目的**: Podman のclient versionとrootless実行境界を確認する入口です。
+- **確認の観点**: 実行環境で client version、rootless、cgroups、network backendを照合し、後続ハンズオンの実行境界を確認します。
 
-### 図E-02：Nginx の起動と疎通確認（例）
+### 図E-02：Nginxコンテナの起動からHTTP 200までの疎通を判断する出力
 
 - **図版リンク**: [第0章の図版へ移動](../../chapters/chapter00/#figure-ch00-nginx-http-02)
 - **ファイル**: `ch00-nginx-http-02.png`
@@ -26,7 +26,7 @@
 
 ## 第1章：Kubernetesの全体像
 
-### 図E-03：kubectl で API を探索する（例）
+### 図E-03：Kubernetes API資源とPod・Deploymentフィールドの探索結果を判断する出力
 
 - **図版リンク**: [第1章の図版へ移動](../../chapters/chapter01/#figure-ch01-kubectl-explore-01)
 - **ファイル**: `ch01-kubectl-explore-01.png`
@@ -35,7 +35,7 @@
 
 ## 第2章：ローカル環境とkubectl
 
-### 図E-04：kind クラスタの作成と確認（例）
+### 図E-04：kindクラスタ作成後のcontrol plane・node・namespace readinessを判断する出力
 
 - **図版リンク**: [第2章の図版へ移動](../../chapters/chapter02/#figure-ch02-kind-bootstrap-01)
 - **ファイル**: `ch02-kind-bootstrap-01.png`
@@ -44,7 +44,7 @@
 
 ## 第3章：YAML基礎とメタデータ設計
 
-### 図E-05：labels の確認（例）
+### 図E-05：DeploymentとPodのlabel・selector整合を判断する出力
 
 - **図版リンク**: [第3章の図版へ移動](../../chapters/chapter03/#figure-ch03-kubectl-show-labels-01)
 - **ファイル**: `ch03-kubectl-show-labels-01.png`
@@ -53,16 +53,16 @@
 
 ## 第4章：Pod設計
 
-### 図E-06：kubectl describe pod（例）
+### 図E-06：PodのProbe・resources・Ready・QoSを判断するdescribe出力
 
 - **図版リンク**: [第4章の図版へ移動](../../chapters/chapter04/#figure-ch04-kubectl-describe-pod-01)
 - **ファイル**: `ch04-kubectl-describe-pod-01.png`
-- **目的**: Probe、Resources、Conditions、Events を `kubectl describe pod` で確認する例を示します。
-- **確認の観点**: readiness/liveness の設定、requests/limits、Pod の Conditions、直近 Events を分けて読み、再起動や未 Ready の原因を一つの表示だけで断定しません。
+- **目的**: Probe、resources、Ready、restart、QoS を `kubectl describe pod` と一覧で確認する例を示します。
+- **確認の観点**: readiness/liveness、requests/limits、Ready、restart、QoSを分けて読み、設定反映と稼働状態を一つの値だけで断定しません。
 
 ## 第5章：Deploymentとロールアウト
 
-### 図E-07：ロールアウトと ReplicaSet の切り替え（例）
+### 図E-07：新旧ReplicaSetの切替とrollout成功を判断する出力
 
 - **図版リンク**: [第5章の図版へ移動](../../chapters/chapter05/#figure-ch05-rollout-rs-01)
 - **ファイル**: `ch05-rollout-rs-01.png`
@@ -71,7 +71,7 @@
 
 ## 第6章：Serviceと名前解決
 
-### 図E-08：Service と DNS の確認（例）
+### 図E-08：ServiceのEndpointSlice・DNS・HTTP到達性を判断する出力
 
 - **図版リンク**: [第6章の図版へ移動](../../chapters/chapter06/#figure-ch06-service-dns-01)
 - **ファイル**: `ch06-service-dns-01.png`
@@ -84,7 +84,7 @@
 
 新規の学習・本番設計では [Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) を現行経路の出発点とし、選定する保守中の implementation について、[公式 implementation 一覧](https://gateway-api.sigs.k8s.io/docs/implementations/list/) と [公式 conformance](https://gateway-api.sigs.k8s.io/docs/concepts/conformance/) で対象 bundle、profile、Route 種別、conformance report、保守状況を確認してください。本書は特定製品を推奨しません。
 
-### 図E-09：ingress-nginx の導入と Host ルーティング（歴史的な学習例）
+### 図E-09：retired済みingress-nginxのhistorical labでcontroller readinessとHost routing成功を判断する出力
 
 - **図版リンク**: [第7章の図版へ移動](../../chapters/chapter07/#figure-ch07-ingress-nginx-01)
 - **ファイル**: `ch07-ingress-nginx-01.png`
@@ -93,16 +93,16 @@
 
 ## 第8章：ConfigMapとSecret
 
-### 図E-10：ConfigMap/Secret の注入（例）
+### 図E-10：ConfigMap反映とSecretファイル存在・readOnly mountを秘密値なしで判断する出力
 
 - **図版リンク**: [第8章の図版へ移動](../../chapters/chapter08/#figure-ch08-configmap-secret-01)
 - **ファイル**: `ch08-configmap-secret-01.png`
-- **目的**: ConfigMap と Secret の作成、Pod への注入、反映確認の例を示します。
+- **目的**: ConfigMap と Secret のPodへの注入を、秘密値を表示せず確認する例を示します。
 - **確認の観点**: `APP_ENV` の値、Secret の mount 先、`readOnly`、参照名を確認し、Secret の実値を画面、ログ、Issue に出力しません。
 
 ## 第9章：ストレージ基礎
 
-### 図E-11：PVC の作成とマウント（例）
+### 図E-11：StorageClass・PVC Bound・mount後データ読取を判断する出力
 
 - **図版リンク**: [第9章の図版へ移動](../../chapters/chapter09/#figure-ch09-pvc-mount-01)
 - **ファイル**: `ch09-pvc-mount-01.png`
@@ -111,7 +111,7 @@
 
 ## 第10章：基本トラブルシューティング
 
-### 図E-12：Service の selector 不整合の切り分け（例）
+### 図E-12：Service selector不整合によるEndpoint消失と復旧を判断する出力
 
 - **図版リンク**: [第10章の図版へ移動](../../chapters/chapter10/#figure-ch10-service-selector-debug-01)
 - **ファイル**: `ch10-service-selector-debug-01.png`

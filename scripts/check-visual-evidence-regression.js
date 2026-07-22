@@ -1,0 +1,162 @@
+#!/usr/bin/env node
+/* Mutation regression for the fail-closed visual-evidence contract. */
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const { crc32, validateVisualEvidence } = require('./check-visual-evidence');
+
+const repoRoot = path.resolve(__dirname, '..');
+const cacheRoot = path.join(repoRoot, 'node_modules', '.cache');
+fs.mkdirSync(cacheRoot, { recursive: true });
+const fixtureRoot = fs.mkdtempSync(path.join(cacheRoot, 'kubernetes-basics-visual-evidence-'));
+
+function copy(relativePath) {
+  const source = path.join(repoRoot, relativePath);
+  const target = path.join(fixtureRoot, relativePath);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.cpSync(source, target, { recursive: true });
+}
+
+const manifestPath = path.join(fixtureRoot, 'src/assets/visual-evidence/manifest.json');
+function readManifest() { return JSON.parse(fs.readFileSync(manifestPath, 'utf8')); }
+function writeManifest(value) { fs.writeFileSync(manifestPath, `${JSON.stringify(value, null, 2)}\n`); }
+
+function expectFailure(name, evidence, mutate, restore) {
+  try {
+    mutate();
+    const errors = validateVisualEvidence(fixtureRoot);
+    if (!errors.some((error) => error.includes(evidence))) throw new Error(`${name}: expected ${JSON.stringify(evidence)}, got:\n${errors.join('\n')}`);
+  } finally {
+    restore();
+  }
+}
+
+function expectSuccess(name, mutate, restore) {
+  try {
+    mutate();
+    const errors = validateVisualEvidence(fixtureRoot);
+    if (errors.length) throw new Error(`${name}: expected success, got:\n${errors.join('\n')}`);
+  } finally {
+    restore();
+  }
+}
+
+for (const item of ['src', 'docs', 'package.json', 'SCREENSHOTS.md', '.github/workflows/book-qa.yml']) copy(item);
+const baselineManifest = fs.readFileSync(manifestPath, 'utf8');
+let passed = 0;
+
+try {
+  const cases = [
+    ['package integration drift', 'complete check:visual-evidence contract',
+      () => { const p = path.join(fixtureRoot, 'package.json'); const v = JSON.parse(fs.readFileSync(p)); v.scripts['check:visual-evidence'] = 'true'; fs.writeFileSync(p, `${JSON.stringify(v, null, 2)}\n`); },
+      () => fs.copyFileSync(path.join(repoRoot, 'package.json'), path.join(fixtureRoot, 'package.json'))],
+    ['missing manifest entry', 'manifest entry count',
+      () => { const m = readManifest(); m.entries.pop(); writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['duplicate id', 'duplicate or missing id',
+      () => { const m = readManifest(); m.entries[1].id = m.entries[0].id; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['digest drift', 'SHA-256 does not match',
+      () => { const m = readManifest(); m.entries[0].sha256 = '0'.repeat(64); writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['dimension drift', 'dimensions/bytes do not match',
+      () => { const m = readManifest(); m.entries[0].width += 1; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['embedded transcript drift', 'embedded PNG transcript must match',
+      () => { const m = readManifest(); m.entries[0].displayedTranscript += 'drift\n'; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['sensitive IPv4 metadata', 'IPv4 address remains',
+      () => { const m = readManifest(); m.entries[0].setupSummary = 'host 192.0.2.10'; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['alt loses decision', 'alt must state the reader decision point',
+      () => { const m = readManifest(); m.entries[0].alt = '単なる画面'; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+    ['caption loses date', 'caption must include capture date',
+      () => { const m = readManifest(); m.entries[0].caption = '判断だけを示す'; writeManifest(m); },
+      () => fs.writeFileSync(manifestPath, baselineManifest)],
+  ];
+  for (const [name, evidence, mutate, restore] of cases) {
+    expectFailure(name, evidence, mutate, restore);
+    passed += 1;
+  }
+
+  const sourceImage = path.join(fixtureRoot, 'src/chapters/chapter00/images/ch00-podman-version-01.png');
+  const docsImage = path.join(fixtureRoot, 'docs/chapters/chapter00/images/ch00-podman-version-01.png');
+  const baselineImage = fs.readFileSync(sourceImage);
+  const baselineDocsImage = fs.readFileSync(docsImage);
+  expectFailure('generated image drift', 'generated docs PNG must exactly match',
+    () => fs.writeFileSync(docsImage, Buffer.from('not the canonical image')),
+    () => fs.writeFileSync(docsImage, baselineDocsImage));
+  passed += 1;
+
+  const sourceChapter = path.join(fixtureRoot, 'src/chapters/chapter00/index.md');
+  const docsChapter = path.join(fixtureRoot, 'docs/chapters/chapter00/index.md');
+  const baselineSourceChapter = fs.readFileSync(sourceChapter, 'utf8');
+  const baselineDocsChapter = fs.readFileSync(docsChapter, 'utf8');
+  expectFailure('missing source chapter reference', 'src chapter must reference the image exactly once',
+    () => fs.writeFileSync(sourceChapter, baselineSourceChapter.replace('./images/ch00-podman-version-01.png', './images/missing.png')),
+    () => fs.writeFileSync(sourceChapter, baselineSourceChapter));
+  passed += 1;
+  expectFailure('generated caption drift', 'docs alt and immediate caption must match',
+    () => fs.writeFileSync(docsChapter, baselineDocsChapter.replace('client version、rootless=true', '別の説明')),
+    () => fs.writeFileSync(docsChapter, baselineDocsChapter));
+  passed += 1;
+  expectSuccess('CRLF chapter portability',
+    () => { fs.writeFileSync(sourceChapter, baselineSourceChapter.replace(/\n/g, '\r\n')); fs.writeFileSync(docsChapter, baselineDocsChapter.replace(/\n/g, '\r\n')); },
+    () => { fs.writeFileSync(sourceChapter, baselineSourceChapter); fs.writeFileSync(docsChapter, baselineDocsChapter); });
+
+  const extraLower = path.join(fixtureRoot, 'src/chapters/chapter00/images/untracked.png');
+  expectFailure('untracked lowercase PNG', 'untracked src screenshot PNG',
+    () => fs.copyFileSync(sourceImage, extraLower), () => fs.rmSync(extraLower, { force: true }));
+  passed += 1;
+  const extraUpper = path.join(fixtureRoot, 'src/chapters/chapter00/images/untracked.PNG');
+  expectFailure('untracked uppercase PNG', 'untracked src screenshot PNG',
+    () => fs.copyFileSync(sourceImage, extraUpper), () => fs.rmSync(extraUpper, { force: true }));
+  passed += 1;
+  const symlink = path.join(fixtureRoot, 'src/chapters/chapter00/images/symlink.png');
+  expectFailure('untracked symlink PNG', 'untracked src screenshot PNG',
+    () => fs.symlinkSync('ch00-podman-version-01.png', symlink), () => fs.rmSync(symlink, { force: true }));
+  passed += 1;
+
+  expectFailure('truncated PNG', 'not a complete decodable PNG',
+    () => fs.writeFileSync(sourceImage, baselineImage.subarray(0, 40)),
+    () => fs.writeFileSync(sourceImage, baselineImage));
+  passed += 1;
+  expectFailure('oversized decoded PNG', 'decoded image exceeds the safety limit',
+    () => {
+      const oversized = Buffer.from(baselineImage);
+      oversized.writeUInt32BE(100000, 16);
+      oversized.writeUInt32BE(100000, 20);
+      oversized.writeUInt32BE(crc32(oversized.subarray(12, 29)), 29);
+      fs.writeFileSync(sourceImage, oversized);
+      const m = readManifest();
+      m.entries[0].width = 100000; m.entries[0].height = 100000; m.entries[0].bytes = oversized.length;
+      m.entries[0].sha256 = crypto.createHash('sha256').update(oversized).digest('hex');
+      writeManifest(m);
+    },
+    () => { fs.writeFileSync(sourceImage, baselineImage); fs.writeFileSync(manifestPath, baselineManifest); });
+  passed += 1;
+  expectFailure('data after IEND', 'data remains after IEND',
+    () => fs.writeFileSync(sourceImage, Buffer.concat([baselineImage, Buffer.from('trailing')])),
+    () => fs.writeFileSync(sourceImage, baselineImage));
+  passed += 1;
+
+  const screenshots = path.join(fixtureRoot, 'SCREENSHOTS.md');
+  const baselineScreenshots = fs.readFileSync(screenshots, 'utf8');
+  expectFailure('policy integration drift', 'SCREENSHOTS.md must document npm run check:visual-evidence',
+    () => fs.writeFileSync(screenshots, baselineScreenshots.replace('npm run check:visual-evidence', 'npm run removed')),
+    () => fs.writeFileSync(screenshots, baselineScreenshots));
+  passed += 1;
+  const css = path.join(fixtureRoot, 'docs/assets/css/main.css');
+  const baselineCss = fs.readFileSync(css, 'utf8');
+  expectFailure('responsive CSS drift', 'published CSS must keep visual evidence responsive',
+    () => fs.writeFileSync(css, baselineCss.replace('max-width: 100%;', 'max-width: none;')),
+    () => fs.writeFileSync(css, baselineCss));
+  passed += 1;
+
+  const finalErrors = validateVisualEvidence(fixtureRoot);
+  if (finalErrors.length) throw new Error(`Restored fixture failed:\n${finalErrors.join('\n')}`);
+  console.log(`Visual-evidence regression passed: ${passed}/${passed} negative mutations, 1/1 CRLF portability, 1/1 restored baseline.`);
+} finally {
+  fs.rmSync(fixtureRoot, { recursive: true, force: true });
+}

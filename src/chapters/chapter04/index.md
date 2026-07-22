@@ -133,7 +133,9 @@ kubectl -n demo describe pod -l app.kubernetes.io/name=web,app.kubernetes.io/ins
 出力例（Probe / Resources / Conditions / Events の確認）:
 
 <a id="figure-ch04-kubectl-describe-pod-01"></a>
-![kubectl describe pod（例）](./images/ch04-kubectl-describe-pod-01.png)
+![PodのProbe・resources・Ready・QoSを判断するdescribe出力](./images/ch04-kubectl-describe-pod-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、Nginx 1.27.5-alpine。readiness/liveness、requests/limits、Ready、restart、QoSを分けて見てPod設計の反映を判断します。_
 
 ## よくある落とし穴
 - readinessProbe を設定せず、起動直後にトラフィックが入り障害になる

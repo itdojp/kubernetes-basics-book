@@ -70,12 +70,16 @@ Kubernetes はコンテナを直接実行するのではなく、ノード上の
 Podman のバージョン確認:
 
 <a id="figure-ch00-podman-version-01"></a>
-![podman version（例）](./images/ch00-podman-version-01.png)
+![Podmanの実行環境とrootless境界を判断するversion情報](./images/ch00-podman-version-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04.3 LTS（WSL2）、Podman 4.9.3、Go 1.22.2。client version、rootless=true、cgroups v2、Netavarkを見て、後続ハンズオンの実行境界を判断します。_
 
 Nginx を起動し、HTTP 応答とログを確認する（例）:
 
 <a id="figure-ch00-nginx-http-02"></a>
-![Nginx の起動と疎通確認（例）](./images/ch00-nginx-http-02.png)
+![Nginxコンテナの起動からHTTP 200までの疎通を判断する出力](./images/ch00-nginx-http-02.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04.3 LTS（WSL2）、Podman 4.9.3、Nginx 1.27.5-alpine。pull、port publish、HTTP 200、access log、停止を同じ対象で確認し、コンテナ内portとhost側到達性を判断します。_
 
 ## よくある落とし穴
 - 「コンテナ内ポート」と「外部公開」の区別が曖昧なまま Service/Ingress を理解しようとする

@@ -90,7 +90,9 @@ kubectl -n demo exec -it "$POD" -- sh -c 'ls -la /etc/secret && test -s /etc/sec
 出力例（ConfigMap/Secret の作成〜注入〜反映確認。`APP_ENV` の値と `/etc/secret` への Secret マウントを確認）:
 
 <a id="figure-ch08-configmap-secret-01"></a>
-![ConfigMap/Secret の注入（例）](./images/ch08-configmap-secret-01.png)
+![ConfigMap反映とSecretファイル存在・readOnly mountを秘密値なしで判断する出力](./images/ch08-configmap-secret-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。ConfigMapのAPP_ENV、SecretのDATA数、ファイル存在、readOnly=trueを見て注入を判断し、秘密値は表示しません。_
 
 ここでは `APP_ENV` の値が表示され、`/etc/secret` が `readOnly` で mount され、その配下に Secret 由来のファイルが存在することが確認ポイントです。
 ハンズオンでも秘密値を画面やログに表示しない癖を付けます。

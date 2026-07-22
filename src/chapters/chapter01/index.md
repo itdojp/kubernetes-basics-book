@@ -70,7 +70,9 @@ kubectl explain deployment.spec.template.spec.containers
 出力例（`kubectl api-resources` / `kubectl explain`）:
 
 <a id="figure-ch01-kubectl-explore-01"></a>
-![kubectl で API を探索する（例）](./images/ch01-kubectl-explore-01.png)
+![Kubernetes API資源とPod・Deploymentフィールドの探索結果を判断する出力](./images/ch01-kubectl-explore-01.png)
+
+_2026-07-23（JST）取得。Ubuntu 24.04 GitHub-hosted runner、Kubernetes 1.35.0、kubectl 1.35.1、kind 0.31.0。api-resourcesとexplainの結果から、対象APIとPod・Deploymentフィールドをマニフェスト作成前に判断します。_
 
 ## よくある落とし穴
 - 「Pod を直接作る」だけで運用し、更新・回復・スケールの仕組みを使わない
