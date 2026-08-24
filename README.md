@@ -7,7 +7,7 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションをK
 
 ## 対象読者
 - Kubernetes をこれから学ぶソフトウェアエンジニア/インフラエンジニア
-- 代表的なリソース（Pod/Deployment/Service/Ingress）を扱う必要がある方
+- 代表的なリソース（Pod / Deployment / Service / Ingress）を扱う必要がある方
 
 ## 実務参照の入口
 
