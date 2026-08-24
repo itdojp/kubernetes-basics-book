@@ -10,12 +10,12 @@ Pod / Deployment / Service / Ingress を中心に、アプリケーションを 
 
 ## 想定読者
 - Kubernetes にアプリケーションを配置する基礎を体系的に学びたいエンジニア
-- kubectl / YAML / 代表的なリソース（Pod/Deployment/Service/Ingress）の理解を整理したい方
+- kubectl / YAML / 代表的なリソース（Pod / Deployment / Service / Ingress）の理解を整理したい方
 
 ## 本書のスコープ
 - 本書は「アプリを Kubernetes に載せる基礎」として、Pod / Deployment / Service / Ingress を中心に扱います。
-- コンテナ基礎（名前空間/cgroups、イメージ、ネットワーク、ボリューム等）は深掘りせず、必要に応じて Podman 本を参照します: https://itdojp.github.io/podman-book/
-- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は別冊に委譲します: https://itdojp.github.io/kubernetes-cluster-ops-book/
+- コンテナ基礎（名前空間/cgroups、イメージ、ネットワーク、ボリューム等）は深掘りせず、必要に応じて [Podman完全ガイド](https://itdojp.github.io/podman-book/) を参照します。
+- クラスタ設計・運用の深掘り（HA、アップグレード、監視基盤、運用設計等）は [Kubernetesクラスタ設計・運用実践ガイド](https://itdojp.github.io/kubernetes-cluster-ops-book/) に委譲します。
 
 ## 実務適用前の Kubernetes 基礎レビューゲート
 

@@ -5,7 +5,7 @@
 
 ## まとめ
 - Kubernetes の基本は「望ましい状態を宣言し、差分を収束させる」ことです。
-- 主要リソースの役割分担（Pod/Deployment/Service/Ingress）を分けて考えると、設計判断が明確になります。
+- 主要リソースの役割分担（Pod / Deployment / Service / Ingress）を分けて考えると、設計判断が明確になります。
 - YAML と metadata（Label/Selector/Namespace）の品質が、運用性に直結します。
 
 ## 次に読む

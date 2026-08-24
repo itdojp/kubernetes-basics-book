@@ -4,7 +4,7 @@ Kubernetes は「望ましい状態（Desired State）」を宣言し、コン�
 
 ## 学習目標
 - Kubernetes の宣言的管理とコントロールループを説明できる
-- 主要リソース（Pod/Deployment/Service/Ingress）の役割分担を整理できる
+- 主要リソース（Pod / Deployment / Service / Ingress）の役割分担を整理できる
 - kubectl でリソースを観測し、仕様を調べる基本操作ができる
 
 ## 扱う範囲 / 扱わない範囲
