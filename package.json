@@ -11,13 +11,11 @@
     "check:figure-index": "node scripts/check-figure-index.js",
     "check:visual-evidence": "node scripts/check-visual-evidence.js && node scripts/check-visual-evidence-regression.js",
     "check:ingress-retirement": "node scripts/check-ingress-retirement.js",
-    "test": "npm run check:docs-sync && npm run check:figure-index && npm run check:visual-evidence && npm run check:ingress-retirement && node scripts/node-build.js",
+    "test": "npm run check:docs-sync && npm run check:figure-index && npm run check:visual-evidence && npm run check:ingress-retirement && node scripts/node-build.js && npm run check:dependency-boundary",
     "check:security": "npm audit",
     "serve": "cd dist && python3 -m http.server 4000 || python -m http.server 4000",
-    "dev": "npm run build && npm run serve"
-  },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "dev": "npm run build && npm run serve",
+    "check:dependency-boundary": "node scripts/check-dependency-boundary.js && node --test scripts/check-dependency-boundary.test.js"
   },
   "repository": {
     "type": "git",
